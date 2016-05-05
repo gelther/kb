@@ -35,7 +35,7 @@ class Kanban_Board extends Kanban_Db
 		'modified_dt_gmt' => 'datetime',
 		'user_id_author'  => 'int',
 		'is_active'       => 'bool',
-		'position' => 'int'
+		'position'        => 'int'
 	);
 
 	static $boards = array();
@@ -112,7 +112,7 @@ class Kanban_Board extends Kanban_Db
 
 		$wp_query->query_vars['kanban']->board->text = apply_filters(
 			'kanban_board_text',
-			include(__DIR__ . '/inc-board-text.php')
+			include( __DIR__ . '/inc-board-text.php' )
 		);
 
 		$wp_query->query_vars['kanban']->board->allowed_users = Kanban_User::get_allowed_users();
@@ -152,7 +152,7 @@ class Kanban_Board extends Kanban_Db
 		);
 
 		foreach ( $js_templates as $js_template ) : ?>
-		<script type="text/html" id="<?php echo basename($js_template, '.php'); ?>">
+		<script type="text/html" id="<?php echo basename( $js_template, '.php' ); ?>">
 
 		<?php include $js_template; ?>
 
@@ -164,7 +164,7 @@ class Kanban_Board extends Kanban_Db
 
 	static function get_all( $sql = NULL )
 	{
-		if ( empty(self::$boards) )
+		if ( empty( self::$boards ) )
 		{
 			$table_name = self::table_name();
 
@@ -177,7 +177,7 @@ class Kanban_Board extends Kanban_Db
 
 			$records = parent::get_all( $sql );
 
-			self::$boards = Kanban_Utils::build_array_with_id_keys($records);
+			self::$boards = Kanban_Utils::build_array_with_id_keys( $records );
 		}
 
 		return apply_filters(
@@ -188,10 +188,10 @@ class Kanban_Board extends Kanban_Db
 
 
 
-	static function get_current ($board_id = NULL)
+	static function get_current( $board_id = NULL )
 	{
 		// if one isn't passed, but is set elsewhere
-		if ( is_null($board_id) && isset($_REQUEST['board_id']) )
+		if ( is_null( $board_id ) && isset( $_REQUEST['board_id'] ) )
 		{
 			$board_id = $_REQUEST['board_id'];
 		}
@@ -199,13 +199,13 @@ class Kanban_Board extends Kanban_Db
 		$boards = self::get_all();
 
 		// if the one we want exists
-		if ( !is_null($board_id) && isset($boards[$board_id]) )
+		if ( ! is_null( $board_id ) && isset( $boards[$board_id] ) )
 		{
 			return $boards[$board_id];
 		}
 
 		// otherwise, pass the first one
-		return reset($boards);
+		return reset( $boards );
 	}
 
 
