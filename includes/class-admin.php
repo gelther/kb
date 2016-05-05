@@ -411,11 +411,11 @@ class Kanban_Admin
 
 
 		$userdata = array(
-			'user_login'  =>  $user_login,
-			'user_email'  =>  $user_email,
-			'first_name'  =>  $user_first,
+			'user_login' =>  $user_login,
+			'user_email' =>  $user_email,
+			'first_name' =>  $user_first,
 			'last_name'  =>  $user_last,
-			'user_pass'   =>  NULL  // When creating an user, `user_pass` is expected.
+			'user_pass'  =>  NULL  // When creating an user, `user_pass` is expected.
 		);
 
 		$user_id = wp_insert_user( $userdata ) ;
