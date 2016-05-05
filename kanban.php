@@ -43,7 +43,7 @@ Kanban::init();
 
 class Kanban
 {
-	static $instance = false;
+	static $instance = FALSE;
 	static $slug = 'kanban';
 
 
@@ -56,7 +56,7 @@ class Kanban
 
 
 		// build settings
-		Kanban::get_instance()->settings = (object) array();
+		Kanban::get_instance()->settings       = (object) array();
 		Kanban::get_instance()->settings->path = dirname( __FILE__ );
 		Kanban::get_instance()->settings->file = basename( __FILE__, '.php' );
 
@@ -64,32 +64,32 @@ class Kanban
 		{
 			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 		}
-		Kanban::get_instance()->settings->plugin_data = get_plugin_data( __FILE__ );
-		Kanban::get_instance()->settings->basename = strtolower( __CLASS__ );
+		Kanban::get_instance()->settings->plugin_data     = get_plugin_data( __FILE__ );
+		Kanban::get_instance()->settings->basename        = strtolower( __CLASS__ );
 		Kanban::get_instance()->settings->plugin_basename = plugin_basename( __FILE__ );
-		Kanban::get_instance()->settings->uri = plugin_dir_url( __FILE__ );
-		Kanban::get_instance()->settings->pretty_name = __( 'Kanban', Kanban::get_instance()->settings->file );
-		Kanban::get_instance()->settings->admin_notice = '';
+		Kanban::get_instance()->settings->uri             = plugin_dir_url( __FILE__ );
+		Kanban::get_instance()->settings->pretty_name     = __( 'Kanban', Kanban::get_instance()->settings->file );
+		Kanban::get_instance()->settings->admin_notice    = '';
 
 
 
 		// require at least PHP 5.3
 		if ( version_compare( PHP_VERSION, '5.3', '<' ) )
 		{
-			Kanban::get_instance()->settings->admin_notice = __('The %s plugin requires at least PHP 5.3. You have %s. Please upgrade and then re-install the plugin.', 'kanban');
+			Kanban::get_instance()->settings->admin_notice = __( 'The %s plugin requires at least PHP 5.3. You have %s. Please upgrade and then re-install the plugin.', 'kanban' );
 			add_action( 'admin_notices', array( __CLASS__, 'notify_php_version' ) );
 			return;
 		}
 
 
 
-		$permalink_structure = get_option('permalink_structure');
-		if ( empty($permalink_structure) )
+		$permalink_structure = get_option( 'permalink_structure' );
+		if ( empty( $permalink_structure ) )
 		{
 			Kanban::get_instance()->settings->admin_notice = sprintf(
-				__('The %s plugin does not support "plain" permalinks. Please visit <a href="%s">Settings > Permalinks</a> and choose any option besides "Plain".', 'kanban'),
+				__( 'The %s plugin does not support "plain" permalinks. Please visit <a href="%s">Settings > Permalinks</a> and choose any option besides "Plain".', 'kanban' ),
 				'%s',
-				admin_url('options-permalink.php')
+				admin_url( 'options-permalink.php' )
 				);
 			add_action( 'admin_notices', array( __CLASS__, 'notify_php_version' ) );
 		}
@@ -143,7 +143,7 @@ class Kanban
 		// @link http://premium.wpmudev.org/blog/tabbed-interface/
 		set_transient(
 			sprintf( '_%s_welcome_screen_activation_redirect', Kanban::get_instance()->settings->basename ),
-			true,
+			TRUE,
 			30
 		);
 	}
@@ -152,7 +152,7 @@ class Kanban
 
 	static function on_deactivation()
 	{
-		delete_option('kanban_db_version');
+		delete_option( 'kanban_db_version' );
 	}
 
 
