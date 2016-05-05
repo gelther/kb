@@ -51,7 +51,7 @@ class Kanban_Estimate extends Kanban_Db
 
 		return apply_filters(
 			'kanban_estimate_get_all_return',
-			Kanban_Utils::build_array_with_id_keys ( $records, 'id' )
+			Kanban_Utils::build_array_with_id_keys( $records, 'id' )
 		);
 	}
 
@@ -61,7 +61,7 @@ class Kanban_Estimate extends Kanban_Db
 	{
 		if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-options' ) || ! is_user_logged_in() ) return;
 
-		if ( !isset($_POST['estimates']) ) return;
+		if ( ! isset( $_POST['estimates'] ) ) return;
 
 
 
@@ -70,12 +70,12 @@ class Kanban_Estimate extends Kanban_Db
 
 
 		$current_board = Kanban_Board::get_current(
-			isset($_POST['board_id']) ? $_POST['board_id'] : NULL
+			isset( $_POST['board_id'] ) ? $_POST['board_id'] : NULL
 		);
 
 
 
-		$estimates = Kanban_Estimate::get_all();
+		$estimates    = Kanban_Estimate::get_all();
 		$estimate_ids = array_keys( $estimates );
 
 
@@ -123,7 +123,7 @@ class Kanban_Estimate extends Kanban_Db
 		{
 			foreach ( $_POST['estimates']['saved'] as $estimate_id => $estimate )
 			{
-				$estimate['id'] = $estimate_id;
+				$estimate['id']       = $estimate_id;
 				$estimate['board_id'] = $current_board->id;
 
 				Kanban_Estimate::replace( $estimate );
