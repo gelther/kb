@@ -82,7 +82,7 @@ class Kanban_Status extends Kanban_Db
 
 
 
-		$statuses = Kanban_Status::get_all();
+		$statuses   = Kanban_Status::get_all();
 		$status_ids = array_keys( $statuses );
 
 
@@ -110,7 +110,7 @@ class Kanban_Status extends Kanban_Db
 			{
 				$status['board_id'] = $current_board->id;
 				// save it
-				$success = Kanban_Status::replace( $status );
+				$success            = Kanban_Status::replace( $status );
 
 				if ( $success )
 				{
@@ -129,7 +129,7 @@ class Kanban_Status extends Kanban_Db
 		{
 			foreach ( $_POST['statuses']['saved'] as $status_id => $status )
 			{
-				$status['id'] = $status_id;
+				$status['id']       = $status_id;
 				$status['board_id'] = $current_board->id;
 
 				Kanban_Status::replace( $status );
