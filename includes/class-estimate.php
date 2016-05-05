@@ -75,7 +75,7 @@ class Kanban_Estimate extends Kanban_Db
 
 
 
-		$estimates = Kanban_Estimate::get_all();
+		$estimates    = Kanban_Estimate::get_all();
 		$estimate_ids = array_keys( $estimates );
 
 
@@ -123,7 +123,7 @@ class Kanban_Estimate extends Kanban_Db
 		{
 			foreach ( $_POST['estimates']['saved'] as $estimate_id => $estimate )
 			{
-				$estimate['id'] = $estimate_id;
+				$estimate['id']       = $estimate_id;
 				$estimate['board_id'] = $current_board->id;
 
 				Kanban_Estimate::replace( $estimate );
