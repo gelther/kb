@@ -35,12 +35,12 @@ class Kanban_User
 		if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'request_access' ) ) return;
 
 		$admin_email = get_option( 'admin_email' );
-		$blogname = get_option( 'blogname' );
+		$blogname    = get_option( 'blogname' );
 
 		$headers = 'From: ' . $admin_email . '\r\n';
 
 		$current_user_id = get_current_user_id();
-		$current_user = get_user_by( 'id', $current_user_id );
+		$current_user    = get_user_by( 'id', $current_user_id );
 
 		wp_mail(
 			$admin_email,
@@ -50,7 +50,7 @@ class Kanban_User
 					'kanban'
 					),
 				Kanban::get_instance()->settings->pretty_name,
-				Kanban_User::get_username_long ( $current_user )
+				Kanban_User::get_username_long( $current_user )
 			),
 			sprintf(
 				__(
@@ -60,7 +60,7 @@ class Kanban_User
 					. '%s' . '\n'
 					. 'And select them as an allowed user.', 'kanban'
 				),
-				Kanban_User::get_username_long ( $current_user ),
+				Kanban_User::get_username_long( $current_user ),
 				admin_url( 'admin.php?page=' . Kanban::get_instance()->settings->basename )
 			),
 			$headers
@@ -68,7 +68,7 @@ class Kanban_User
 
 
 
-		Kanban_Flash::flash (
+		Kanban_Flash::flash(
 			__( 'Your request has been sent.', 'kanban' ),
 			'success'
 		);
@@ -96,7 +96,7 @@ class Kanban_User
 
 			if ( empty( $user ) )
 			{
-				Kanban_Flash::flash (
+				Kanban_Flash::flash(
 					__( 'Whoops! We can\'t find an account for that email address.', 'kanban' ),
 					'danger'
 				);
@@ -111,7 +111,7 @@ class Kanban_User
 
 			if ( empty( $user ) )
 			{
-				Kanban_Flash::flash (
+				Kanban_Flash::flash(
 					__( 'Whoops! We can\'t find an account for that username.', 'kanban' ),
 					'danger'
 				);
@@ -123,18 +123,18 @@ class Kanban_User
 
 
 
-		$creds = array();
-		$creds['user_login'] = $user->user_login;
+		$creds                  = array();
+		$creds['user_login']    = $user->user_login;
 		$creds['user_password'] = $_POST['password'];
-		$creds['remember'] = true;
+		$creds['remember']      = TRUE;
 
-		$user = wp_signon( $creds, false );
+		$user = wp_signon( $creds, FALSE );
 
 
 
 		if ( is_wp_error( $user ) )
 		{
-			Kanban_Flash::flash (
+			Kanban_Flash::flash(
 				__( 'Whoops! That password is incorrect for this email address.', 'kanban' ),
 				'danger'
 			);
@@ -214,9 +214,9 @@ class Kanban_User
 				}
 
 				// fancy name formating
-				Kanban_User::get_instance()->allowed_users[$user_id]->long_name_email = Kanban_User::get_username_long ( $user );
-				Kanban_User::get_instance()->allowed_users[$user_id]->short_name = Kanban_User::get_username_short ( $user, TRUE );
-				Kanban_User::get_instance()->allowed_users[$user_id]->initials = Kanban_User::get_initials ( $user );
+				Kanban_User::get_instance()->allowed_users[$user_id]->long_name_email = Kanban_User::get_username_long( $user );
+				Kanban_User::get_instance()->allowed_users[$user_id]->short_name = Kanban_User::get_username_short( $user, TRUE );
+				Kanban_User::get_instance()->allowed_users[$user_id]->initials = Kanban_User::get_initials( $user );
 			}
 		}
 
@@ -225,7 +225,7 @@ class Kanban_User
 
 
 
-	static function get_current_user ()
+	static function get_current_user()
 	{
 		$allowed_users = self::get_allowed_users();
 
@@ -268,7 +268,7 @@ class Kanban_User
 		}
 		else
 		{
-			$parts = explode( '@', $user->user_email );
+			$parts    = explode( '@', $user->user_email );
 			$username = $parts[0];
 			return $username;
 		}
@@ -307,12 +307,13 @@ class Kanban_User
 	 * @param  int|string|object $id_or_email A user ID,  email address, or comment object
 	 * @return bool                           if the gravatar exists or not
 	 */
-	static function validate_gravatar( $id_or_email ) {
+	static function validate_gravatar( $id_or_email )
+	{
 		//id or email code borrowed from wp-includes/pluggable.php
 		$email = '';
 		if ( is_numeric( $id_or_email ) )
 		{
-			$id = (int) $id_or_email;
+			$id   = (int) $id_or_email;
 			$user = get_userdata( $id );
 			if ( $user )
 			{
@@ -328,38 +329,54 @@ class Kanban_User
 			);
 
 			if ( ! empty( $id_or_email->comment_type ) && ! in_array( $id_or_email->comment_type, (array) $allowed_comment_types ) )
-				return false;
+			{
+				return FALSE;
+			}
 
-			if ( ! empty( $id_or_email->user_id ) ) {
-				$id = (int) $id_or_email->user_id;
+			if ( ! empty( $id_or_email->user_id ) )
+			{
+				$id   = (int) $id_or_email->user_id;
 				$user = get_userdata( $id );
 				if ( $user )
+				{
 					$email = $user->user_email;
-			} elseif ( ! empty( $id_or_email->comment_author_email ) ) {
+				}
+			}
+			elseif ( ! empty( $id_or_email->comment_author_email ) )
+			{
 				$email = $id_or_email->comment_author_email;
 			}
-		} else {
+		}
+		else
+		{
 			$email = $id_or_email;
 		}
 
 		$hashkey = md5( strtolower( trim( $email ) ) );
-		$uri = 'http://www.gravatar.com/avatar/' . $hashkey . '?d=404';
+		$uri     = 'http://www.gravatar.com/avatar/' . $hashkey . '?d=404';
 
 		$data = wp_cache_get( $hashkey );
-		if ( false === $data ) {
+		if ( FALSE === $data )
+		{
 			$response = wp_remote_head( $uri );
-			if ( is_wp_error( $response ) ) {
+			if ( is_wp_error( $response ) )
+			{
 				$data = 'not200';
-			} else {
+			}
+			else
+			{
 				$data = $response['response']['code'];
 			}
-			wp_cache_set( $hashkey, $data, $group = '', $expire = 60*5);
+			wp_cache_set( $hashkey, $data, $group = '', $expire = 60*5 );
 
 		}
-		if ( $data == '200' ){
-			return true;
-		} else {
-			return false;
+		if ( $data == '200' )
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
 		}
 	}
 
