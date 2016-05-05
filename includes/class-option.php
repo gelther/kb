@@ -21,8 +21,8 @@ class Kanban_Option extends Kanban_Db
 
 	// define db table columns and their validation type
 	protected static $table_columns = array(
-		'name'  => 'text',
-		'value' => 'text',
+		'name'     => 'text',
+		'value'    => 'text',
 		'board_id' => 'int'
 	);
 
