@@ -35,9 +35,9 @@ include Kanban_Template::find_template( 'inc/header' ); ?>
 
 
 <script type="text/javascript">
-var ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>';
+var ajaxurl = '<?php echo admin_url( 'admin-ajax.php' ); ?>';
 
-var alert = "<?php echo addslashes($wp_query->query_vars['kanban']->board->alert); ?>";
+var alert = "<?php echo addslashes( $wp_query->query_vars['kanban']->board->alert ); ?>";
 
 var board = {
 	settings: function ()
