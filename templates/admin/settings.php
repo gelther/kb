@@ -50,7 +50,7 @@
 							</label>
 						</th>
 						<td>
-							<input name="settings[hour_interval]" type="text" id="hour_increment" value="<?php echo isset($settings['hour_interval']) ? $settings['hour_interval'] : 1 ?>" class="regular-text">
+							<input name="settings[hour_interval]" type="text" id="hour_increment" value="<?php echo isset( $settings['hour_interval'] ) ? $settings['hour_interval'] : 1 ?>" class="regular-text">
 							<p class="description">
 								<?php echo __( 'Example: If you want to track work in 10 minute increments, enter ".1667" here.', 'kanban' ); ?>
 							</p>
@@ -148,7 +148,7 @@
 											</th>
 											<td>
 												<fieldset>
-					<?php if ( count($all_users_arr) > 10 ) : ?>
+					<?php if ( count( $all_users_arr ) > 10 ) : ?>
 													<p>
 														Filter: <input type="text" class="users-filter">
 													</p>
@@ -216,7 +216,7 @@
 											<?php echo __( 'Note: user will immediately be added to the Kanban board.', 'kanban' ); ?>
 										</i>
 									</p>
-									<?php echo Kanban_Template::render_template( 'admin/users-form-registration'); ?>
+									<?php echo Kanban_Template::render_template( 'admin/users-form-registration' ); ?>
 								</div>
 
 							</div>
