@@ -1057,7 +1057,7 @@ abstract class Kanban_Db
 					'title'    => $title,
 					'hours'    => $hours,
 					'position' => $i,
-					'board_id'  => $board_id,
+					'board_id' => $board_id,
 				);
 
 				Kanban_Estimate::replace( $data );
