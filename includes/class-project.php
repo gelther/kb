@@ -50,7 +50,7 @@ class Kanban_Project extends Kanban_Db
 
 		if ( ! isset( $_POST['project']['id'] ) )
 		{
-			$_POST['project']['id'] = '';
+			$_POST['project']['id']             = '';
 			$_POST['project']['created_dt_gmt'] = Kanban_Utils::mysql_now_gmt();
 		}
 
@@ -61,7 +61,7 @@ class Kanban_Project extends Kanban_Db
 
 
 		$_POST['project']['modified_dt_gmt'] = Kanban_Utils::mysql_now_gmt();
-		$_POST['project']['user_id_author'] = get_current_user_id();
+		$_POST['project']['user_id_author']  = get_current_user_id();
 
 
 
@@ -154,7 +154,7 @@ class Kanban_Project extends Kanban_Db
 
 	static function get_all( $sql = NULL )
 	{
-		$table_name = self::table_name();
+		$table_name       = self::table_name();
 		$tasks_table_name = Kanban_Task::table_name();
 
 		$sql = "SELECT `projects`.*,
