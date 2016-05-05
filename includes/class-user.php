@@ -307,7 +307,8 @@ class Kanban_User
 	 * @param  int|string|object $id_or_email A user ID,  email address, or comment object
 	 * @return bool                           if the gravatar exists or not
 	 */
-	static function validate_gravatar( $id_or_email ) {
+	static function validate_gravatar( $id_or_email )
+	{
 		//id or email code borrowed from wp-includes/pluggable.php
 		$email = '';
 		if ( is_numeric( $id_or_email ) )
@@ -328,14 +329,18 @@ class Kanban_User
 			);
 
 			if ( ! empty( $id_or_email->comment_type ) && ! in_array( $id_or_email->comment_type, (array) $allowed_comment_types ) )
+			{
 				return FALSE;
+			}
 
 			if ( ! empty( $id_or_email->user_id ) )
 			{
 				$id   = (int) $id_or_email->user_id;
 				$user = get_userdata( $id );
 				if ( $user )
+				{
 					$email = $user->user_email;
+				}
 			}
 			elseif ( ! empty( $id_or_email->comment_author_email ) )
 			{
@@ -362,7 +367,7 @@ class Kanban_User
 			{
 				$data = $response['response']['code'];
 			}
-			wp_cache_set( $hashkey, $data, $group = '', $expire = 60*5);
+			wp_cache_set( $hashkey, $data, $group = '', $expire = 60*5 );
 
 		}
 		if ( $data == '200' )
