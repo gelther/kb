@@ -365,11 +365,11 @@ class Kanban_Admin
 
 
 
-	static function ajax_register_user ()
+	static function ajax_register_user()
 	{
 		if ( !wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-new-user') ) return;
 
-		$user_login		= $_POST["new-user-login"];	
+		$user_login		= $_POST["new-user-login"];
 		$user_email		= $_POST["new-user-email"];
 		$user_first 	= $_POST["new-user-first"];
 		$user_last	 	= $_POST["new-user-last"];
@@ -402,7 +402,7 @@ class Kanban_Admin
 			$errors[] = __('Email already registered');
 		}
 
-		if ( !empty($errors) ) 
+		if ( !empty($errors) )
 		{
 			wp_send_json_error(array('error' => implode('<br>', $errors)));
 			return;
