@@ -35,7 +35,7 @@ class Kanban_Board extends Kanban_Db
 		'modified_dt_gmt' => 'datetime',
 		'user_id_author'  => 'int',
 		'is_active'       => 'bool',
-		'position' => 'int'
+		'position'        => 'int'
 	);
 
 	static $boards = array();
