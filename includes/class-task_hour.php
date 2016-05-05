@@ -65,7 +65,7 @@ class Kanban_Task_Hour extends Kanban_Db
 		try
 		{
 			$operator = substr( $_POST['operator'], 0, 1 ) == '-' ? '-' : '+';
-			$val = sprintf( '%s%s', $operator, abs( floatval( $_POST['operator'] ) ) );
+			$val      = sprintf( '%s%s', $operator, abs( floatval( $_POST['operator'] ) ) );
 		}
 		catch ( Exception $e )
 		{
