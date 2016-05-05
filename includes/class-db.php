@@ -358,7 +358,7 @@ abstract class Kanban_Db
 	 * delete projects
 	 * delete terms
 	 * clean up
-	 * @return   [type] [description]
+	 * @return [type] [description]
 	 */
 	static function ajax_migrate_records()
 	{
