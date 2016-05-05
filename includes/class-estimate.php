@@ -61,7 +61,7 @@ class Kanban_Estimate extends Kanban_Db
 	{
 		if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-options' ) || ! is_user_logged_in() ) return;
 
-		if ( !isset($_POST['estimates']) ) return;
+		if ( ! isset($_POST['estimates']) ) return;
 
 
 
