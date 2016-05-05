@@ -109,11 +109,11 @@ class Kanban_Option extends Kanban_Db
 
 
 
-	static function get_all_raw($board_id = NULL)
+	static function get_all_raw( $board_id = NULL )
 	{
 		if ( empty( self::$options_raw ) )
 		{
-			$current_board = Kanban_Board::get_current($board_id);
+			$current_board = Kanban_Board::get_current( $board_id );
 
 			$table_name = self::table_name();
 
@@ -269,13 +269,13 @@ class Kanban_Option extends Kanban_Db
 
 
 		$current_board = Kanban_Board::get_current(
-			isset($_POST['board_id']) ? $_POST['board_id'] : NULL
+			isset( $_POST['board_id'] ) ? $_POST['board_id'] : NULL
 		);
 
 
 
 		// get current settings
-		$settings = Kanban_Option::get_all($current_board->id);
+		$settings = Kanban_Option::get_all( $current_board->id );
 
 
 
@@ -283,9 +283,9 @@ class Kanban_Option extends Kanban_Db
 		foreach ( $_POST['settings'] as $key => $value )
 		{
 			// save licenses, just in case
-			if ( ! isset($settings[$key]) && substr($key, 0, 7) != 'license' ) continue;
+			if ( ! isset( $settings[$key] ) && substr( $key, 0, 7 ) != 'license' ) continue;
 
-			Kanban_Option::update($key, $value);
+			Kanban_Option::update( $key, $value );
 		}
 
 
