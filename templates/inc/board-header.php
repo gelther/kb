@@ -1,1 +1,1 @@
-<?php echo apply_filters( 'kanban_board_header_after', '' ); ?>
+<?php echo apply_filters( 'kanban_board_header_after', '' );
