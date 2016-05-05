@@ -86,7 +86,7 @@ class Kanban_Project extends Kanban_Db
 		if ( $is_successful )
 		{
 			wp_send_json_success( array(
-				'message' => sprintf( '%s saved', self::$slug ),
+				'message'   => sprintf( '%s saved', self::$slug ),
 				self::$slug => $post_data
 			) );
 		}
