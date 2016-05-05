@@ -47,7 +47,7 @@
 					</button>
 					<?php wp_nonce_field( 'request_access', Kanban_Utils::get_nonce() ); ?>
 				</p>
-<?php endif // is_user_logged_in ?>
+<?php endif; // is_user_logged_in ?>
 			</div><!-- panel-body -->
 		</div><!-- panel -->
 	</form>

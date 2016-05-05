@@ -43,7 +43,7 @@ Kanban::init();
 
 class Kanban
 {
-	static $instance = false;
+	static $instance = FALSE;
 	static $slug = 'kanban';
 
 
@@ -56,7 +56,7 @@ class Kanban
 
 
 		// build settings
-		Kanban::get_instance()->settings = (object) array();
+		Kanban::get_instance()->settings       = (object) array();
 		Kanban::get_instance()->settings->path = dirname( __FILE__ );
 		Kanban::get_instance()->settings->file = basename( __FILE__, '.php' );
 
@@ -64,12 +64,12 @@ class Kanban
 		{
 			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 		}
-		Kanban::get_instance()->settings->plugin_data = get_plugin_data( __FILE__ );
-		Kanban::get_instance()->settings->basename = strtolower( __CLASS__ );
+		Kanban::get_instance()->settings->plugin_data     = get_plugin_data( __FILE__ );
+		Kanban::get_instance()->settings->basename        = strtolower( __CLASS__ );
 		Kanban::get_instance()->settings->plugin_basename = plugin_basename( __FILE__ );
-		Kanban::get_instance()->settings->uri = plugin_dir_url( __FILE__ );
-		Kanban::get_instance()->settings->pretty_name = __( 'Kanban', Kanban::get_instance()->settings->file );
-		Kanban::get_instance()->settings->admin_notice = '';
+		Kanban::get_instance()->settings->uri             = plugin_dir_url( __FILE__ );
+		Kanban::get_instance()->settings->pretty_name     = __( 'Kanban', Kanban::get_instance()->settings->file );
+		Kanban::get_instance()->settings->admin_notice    = '';
 
 
 
@@ -143,7 +143,7 @@ class Kanban
 		// @link http://premium.wpmudev.org/blog/tabbed-interface/
 		set_transient(
 			sprintf( '_%s_welcome_screen_activation_redirect', Kanban::get_instance()->settings->basename ),
-			true,
+			TRUE,
 			30
 		);
 	}

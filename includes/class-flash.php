@@ -58,13 +58,13 @@ class Kanban_Flash
 		{
 			self::clear();
 
-			$_SESSION[self::$namespace] = $message;
-			$_SESSION[self::$namespace.'_class'] = $class;
+			$_SESSION[self::$namespace]            = $message;
+			$_SESSION[self::$namespace . '_class'] = $class;
 		}
 		//Message exists, display it
 		elseif ( ! empty( $_SESSION[self::$namespace] ) )
 		{
-			$class = ! empty( $_SESSION[self::$namespace.'_class'] ) ? $_SESSION[self::$namespace.'_class'] : 'success';
+			$class = ! empty( $_SESSION[self::$namespace . '_class'] ) ? $_SESSION[self::$namespace . '_class'] : 'success';
 			echo sprintf(
 				'<div class="alert alert-%s">%s</div>',
 				$class,
@@ -80,7 +80,7 @@ class Kanban_Flash
 	static function clear()
 	{
 		unset( $_SESSION[self::$namespace] );
-		unset( $_SESSION[self::$namespace.'_class'] );
+		unset( $_SESSION[self::$namespace . '_class'] );
 	}
 
 }

@@ -16,7 +16,7 @@
 		<input id="new-user-last" class="large-text required" type="text">
 	</p>
 	<p>
-		<input type="hidden" id="<?php echo Kanban_Utils::get_nonce() ?>" value="<?php echo wp_create_nonce('kanban-new-user'); ?>">
+		<input type="hidden" id="<?php echo Kanban_Utils::get_nonce(); ?>" value="<?php echo wp_create_nonce('kanban-new-user'); ?>">
 		<?php submit_button(
 			__( 'Add a user', 'kanban' ),
 				'primary button-add-user',
@@ -24,4 +24,3 @@
 		); ?>
 	</p>
 </fieldset>
-

@@ -223,8 +223,8 @@ class Kanban_Option extends Kanban_Db
 			sprintf( '%s_settings', Kanban::get_instance()->settings->basename ),
 			sprintf( '%s/js/admin-settings.min.js', Kanban::get_instance()->settings->uri ),
 			array( 'wp-color-picker' ),
-			false,
-			true
+			FALSE,
+			TRUE
 		);
 	}
 
@@ -238,7 +238,7 @@ class Kanban_Option extends Kanban_Db
 			$settings['allowed_users'] = unserialize( $settings['allowed_users'] );
 		}
 
-		$all_users = get_users();
+		$all_users     = get_users();
 		$all_users_arr = array();
 		foreach ( $all_users as $user )
 		{

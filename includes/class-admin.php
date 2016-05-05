@@ -227,7 +227,7 @@ class Kanban_Admin
 				.fail( function( data )
 				{
 					migration_failed();
-					return false;
+					return FALSE;
 				} );
 			}; // do_migrate
 
@@ -278,7 +278,7 @@ class Kanban_Admin
 		global $wpdb;
 
 		$current_user_id = get_current_user_id();
-		$lastRun = (int) Kanban_Option::get_option( 'admin-addons-check' );
+		$lastRun         = (int) Kanban_Option::get_option( 'admin-addons-check' );
 
 		if ( time() - $lastRun >= 60*60*24 ) // 1 day
 		{
@@ -339,7 +339,7 @@ class Kanban_Admin
 
 	static function contact_support()
 	{
-		if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-admin-comment' ) || ! is_user_logged_in() ) return false;
+		if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-admin-comment' ) || ! is_user_logged_in() ) return FALSE;
 
 		try
 		{
@@ -369,10 +369,10 @@ class Kanban_Admin
 	{
 		if ( ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-new-user') ) return;
 
-		$user_login		= $_POST['new-user-login'];
-		$user_email		= $_POST['new-user-email'];
-		$user_first 	= $_POST['new-user-first'];
-		$user_last	 	= $_POST['new-user-last'];
+		$user_login = $_POST['new-user-login'];
+		$user_email = $_POST['new-user-email'];
+		$user_first = $_POST['new-user-first'];
+		$user_last  = $_POST['new-user-last'];
 
 		$errors = array();
 
@@ -431,7 +431,7 @@ class Kanban_Admin
 
 
 		// add new user to allowed users
-		$allowed_users = Kanban_Option::get_option( 'allowed_users' );
+		$allowed_users   = Kanban_Option::get_option( 'allowed_users' );
 		$allowed_users[] = $user_id;
 
 		Kanban_Option::update( 'allowed_users', $allowed_users );

@@ -253,7 +253,7 @@ class Kanban_Template
 			}
 			else
 			{
-				$template = false;
+				$template = FALSE;
 			}
 		}
 
@@ -272,7 +272,7 @@ class Kanban_Template
 	{
 		$template_path = Kanban_Template::find_template( $basename );
 
-		if ( ! $template_path ) return false;
+		if ( ! $template_path ) return FALSE;
 
 		extract( $data );
 		ob_start();

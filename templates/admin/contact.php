@@ -16,7 +16,7 @@
 			<?php echo $_GET['alert']; ?>
 		</p>
 	</div>
-<?php endif // alert ?>
+<?php endif; // alert ?>
 
 
 

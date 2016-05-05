@@ -80,7 +80,7 @@ class Kanban_Task extends Kanban_Db
 
 		if ( ! isset( $_POST['task']['id'] ) )
 		{
-			$_POST['task']['id'] = '';
+			$_POST['task']['id']             = '';
 			$_POST['task']['created_dt_gmt'] = Kanban_Utils::mysql_now_gmt();
 		}
 
@@ -236,8 +236,8 @@ class Kanban_Task extends Kanban_Db
 
 	static function get_one( $task_id )
 	{
-		$record = parent::get_row( 'ID', $task_id );
-		$record->title = Kanban_Utils::str_for_frontend( $record->title );
+		$record              = parent::get_row( 'ID', $task_id );
+		$record->title       = Kanban_Utils::str_for_frontend( $record->title );
 		$record->description = Kanban_Utils::str_for_frontend( $record->description );
 
 		return apply_filters( 'kanban_task_get_one_return', $record );

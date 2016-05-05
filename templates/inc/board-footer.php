@@ -72,7 +72,7 @@
 	<a href="<?php echo admin_url( sprintf('admin.php?page=%s_settings', Kanban::$instance->settings->basename) ); ?>" class="btn btn-default" target="_blank">
 		<?php echo __( 'Settings', 'kanban' ); ?>
 	</a>
-<?php endif ?>
+<?php endif; ?>
 
 
 </div><!-- footer -->
