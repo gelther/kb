@@ -279,7 +279,7 @@ class Kanban_Task extends Kanban_Db
 
 		return apply_filters(
 			'kanban_task_get_all_return',
-			Kanban_Utils::build_array_with_id_keys ( $records, 'id' )
+			Kanban_Utils::build_array_with_id_keys( $records, 'id' )
 		);
 	}
 
