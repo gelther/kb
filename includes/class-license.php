@@ -39,7 +39,7 @@ class Kanban_License
 		// save all single settings
 		foreach ( $_POST['settings'] as $key => $value )
 		{
-			if ( !isset($settings[$key]) ) continue;
+			if ( ! isset($settings[$key]) ) continue;
 
 			Kanban_Option::update($key, $value);
 		}

@@ -199,7 +199,7 @@ class Kanban_Board extends Kanban_Db
 		$boards = self::get_all();
 
 		// if the one we want exists
-		if ( !is_null($board_id) && isset($boards[$board_id]) )
+		if ( ! is_null($board_id) && isset($boards[$board_id]) )
 		{
 			return $boards[$board_id];
 		}
