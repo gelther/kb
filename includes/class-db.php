@@ -254,7 +254,7 @@ abstract class Kanban_Db
 	 */
 	static function check_for_updates()
 	{
-		if ( version_compare(self::installed_ver(), Kanban::get_instance()->settings->plugin_data['Version']) === 0 ) return FALSE;
+		if ( version_compare( self::installed_ver(), Kanban::get_instance()->settings->plugin_data['Version'] ) === 0 ) return FALSE;
 
 		global $charset_collate, $wpdb;
 
@@ -324,7 +324,7 @@ abstract class Kanban_Db
 
 
 		// save db version to avoid updates
-		update_option('kanban_db_version', Kanban::get_instance()->settings->plugin_data['Version'] );
+		update_option( 'kanban_db_version', Kanban::get_instance()->settings->plugin_data['Version'] );
 	}
 
 
