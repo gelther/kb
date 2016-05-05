@@ -188,7 +188,7 @@ class Kanban_Board extends Kanban_Db
 
 
 
-	static function get_current ($board_id = NULL)
+	static function get_current($board_id = NULL)
 	{
 		// if one isn't passed, but is set elsewhere
 		if ( is_null($board_id) && isset($_REQUEST['board_id']) )

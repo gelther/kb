@@ -104,7 +104,7 @@ class Kanban_Template
 
 
 		// allow for addition checks
-		$can_view = apply_filters ( 'kanban_template_protect_slug_check', FALSE );
+		$can_view = apply_filters( 'kanban_template_protect_slug_check', FALSE );
 
 
 
@@ -122,7 +122,7 @@ class Kanban_Template
 
 		if ( (bool) $use_default_login_page )
 		{
-			wp_redirect( 
+			wp_redirect(
 				wp_login_url(sprintf( '%s/%s/board', site_url(), Kanban::$slug ))
 			);
 		}
