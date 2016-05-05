@@ -367,7 +367,7 @@ class Kanban_Admin
 
 	static function ajax_register_user()
 	{
-		if ( ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-new-user') ) return;
+		if ( ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-new-user' ) ) return;
 
 		$user_login = $_POST['new-user-login'];
 		$user_email = $_POST['new-user-email'];
@@ -376,35 +376,35 @@ class Kanban_Admin
 
 		$errors = array();
 
-		if ( username_exists($user_login) )
+		if ( username_exists( $user_login ) )
 		{
-			$errors[] = __('Username already taken');
+			$errors[] = __( 'Username already taken' );
 		}
 
-		if ( ! validate_username($user_login) )
+		if ( ! validate_username( $user_login ) )
 		{
-			$errors[] = __('Invalid username');
+			$errors[] = __( 'Invalid username' );
 		}
 
 		if ( $user_login == '' )
 		{
-			$errors[] = __('Please enter a username');
+			$errors[] = __( 'Please enter a username' );
 		}
 
-		if ( ! is_email($user_email) )
+		if ( ! is_email( $user_email ) )
 		{
 
-			$errors[] = __('Invalid email');
+			$errors[] = __( 'Invalid email' );
 		}
 
-		if ( email_exists($user_email) )
+		if ( email_exists( $user_email ) )
 		{
-			$errors[] = __('Email already registered');
+			$errors[] = __( 'Email already registered' );
 		}
 
-		if ( ! empty($errors) )
+		if ( ! empty( $errors ) )
 		{
-			wp_send_json_error(array('error' => implode('<br>', $errors)));
+			wp_send_json_error( array( 'error' => implode( '<br>', $errors ) ) );
 			return;
 		}
 
@@ -422,9 +422,9 @@ class Kanban_Admin
 
 
 
-		if ( is_wp_error($user_id) )
+		if ( is_wp_error( $user_id ) )
 		{
-			wp_send_json_error(array('error' => 'User could not be created. Please use the User > Add New page'));
+			wp_send_json_error( array( 'error' => 'User could not be created. Please use the User > Add New page' ) );
 			return;
 		}
 
@@ -439,11 +439,11 @@ class Kanban_Admin
 
 
 		// send an email to the admin alerting them of the registration
-		wp_new_user_notification($user_id, NULL, 'both');
+		wp_new_user_notification( $user_id, NULL, 'both' );
 
 
 
-		wp_send_json_success(array('new_user_id' => $user_id));
+		wp_send_json_success( array( 'new_user_id' => $user_id ) );
 	}
 
 
