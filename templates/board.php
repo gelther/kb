@@ -82,7 +82,7 @@ var sidebar_w = <?php echo $wp_query->query_vars['kanban']->board->sidebar_w ?>;
 
 #row-tasks, #row-statuses {
 	left: -<?php echo $wp_query->query_vars['kanban']->board->sidebar_w ?>%;
-	width: <?php echo 100+($wp_query->query_vars['kanban']->board->sidebar_w*2) ?>%;
+	width: <?php echo 100+($wp_query->query_vars['kanban']->board->sidebar_w*2); ?>%;
 }
 </style>
 
