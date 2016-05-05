@@ -68,7 +68,7 @@ class Kanban_Status extends Kanban_Db
 	{
 		if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-options' ) || ! is_user_logged_in() ) return;
 
-		if ( ! isset($_POST['statuses']) ) return;
+		if ( ! isset( $_POST['statuses'] ) ) return;
 
 
 
@@ -77,7 +77,7 @@ class Kanban_Status extends Kanban_Db
 
 
 		$current_board = Kanban_Board::get_current(
-			isset($_POST['board_id']) ? $_POST['board_id'] : NULL
+			isset( $_POST['board_id'] ) ? $_POST['board_id'] : NULL
 		);
 
 

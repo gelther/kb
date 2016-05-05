@@ -56,7 +56,7 @@ class Kanban_Task extends Kanban_Db
 
 		if ( $hours < 1 )
 		{
-			$label = sprintf( '%sm', ceil( $hours*60/100));
+			$label = sprintf( '%sm', ceil( $hours*60/100 ) );
 		}
 		elseif ( $hours < 8 )
 		{

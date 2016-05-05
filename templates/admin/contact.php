@@ -28,7 +28,7 @@
 						<label for="from">From</label>
 					</th>
 					<td>
-						<input name="from" type="text" id="from" value="<?php echo get_option('admin_email'); ?>"  class="large-text">
+						<input name="from" type="text" id="from" value="<?php echo get_option( 'admin_email' ); ?>"  class="large-text">
 					</td>
 				</tr>
 				<tr>

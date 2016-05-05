@@ -76,20 +76,20 @@ class Kanban
 		// require at least PHP 5.3
 		if ( version_compare( PHP_VERSION, '5.3', '<' ) )
 		{
-			Kanban::get_instance()->settings->admin_notice = __('The %s plugin requires at least PHP 5.3. You have %s. Please upgrade and then re-install the plugin.', 'kanban');
+			Kanban::get_instance()->settings->admin_notice = __( 'The %s plugin requires at least PHP 5.3. You have %s. Please upgrade and then re-install the plugin.', 'kanban' );
 			add_action( 'admin_notices', array( __CLASS__, 'notify_php_version' ) );
 			return;
 		}
 
 
 
-		$permalink_structure = get_option('permalink_structure');
-		if ( empty($permalink_structure) )
+		$permalink_structure = get_option( 'permalink_structure' );
+		if ( empty( $permalink_structure ) )
 		{
 			Kanban::get_instance()->settings->admin_notice = sprintf(
-				__('The %s plugin does not support "plain" permalinks. Please visit <a href="%s">Settings > Permalinks</a> and choose any option besides "Plain".', 'kanban'),
+				__( 'The %s plugin does not support "plain" permalinks. Please visit <a href="%s">Settings > Permalinks</a> and choose any option besides "Plain".', 'kanban' ),
 				'%s',
-				admin_url('options-permalink.php')
+				admin_url( 'options-permalink.php' )
 				);
 			add_action( 'admin_notices', array( __CLASS__, 'notify_php_version' ) );
 		}
@@ -152,7 +152,7 @@ class Kanban
 
 	static function on_deactivation()
 	{
-		delete_option('kanban_db_version');
+		delete_option( 'kanban_db_version' );
 	}
 
 
