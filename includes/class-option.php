@@ -21,8 +21,8 @@ class Kanban_Option extends Kanban_Db
 
 	// define db table columns and their validation type
 	protected static $table_columns = array(
-		'name'  => 'text',
-		'value' => 'text',
+		'name'     => 'text',
+		'value'    => 'text',
 		'board_id' => 'int'
 	);
 
@@ -109,11 +109,11 @@ class Kanban_Option extends Kanban_Db
 
 
 
-	static function get_all_raw($board_id = NULL)
+	static function get_all_raw( $board_id = NULL )
 	{
 		if ( empty( self::$options_raw ) )
 		{
-			$current_board = Kanban_Board::get_current($board_id);
+			$current_board = Kanban_Board::get_current( $board_id );
 
 			$table_name = self::table_name();
 
@@ -223,8 +223,8 @@ class Kanban_Option extends Kanban_Db
 			sprintf( '%s_settings', Kanban::get_instance()->settings->basename ),
 			sprintf( '%s/js/admin-settings.min.js', Kanban::get_instance()->settings->uri ),
 			array( 'wp-color-picker' ),
-			false,
-			true
+			FALSE,
+			TRUE
 		);
 	}
 
@@ -238,7 +238,7 @@ class Kanban_Option extends Kanban_Db
 			$settings['allowed_users'] = unserialize( $settings['allowed_users'] );
 		}
 
-		$all_users = get_users();
+		$all_users     = get_users();
 		$all_users_arr = array();
 		foreach ( $all_users as $user )
 		{
@@ -246,10 +246,10 @@ class Kanban_Option extends Kanban_Db
 		}
 
 		$statuses = Kanban_Status::get_all();
-		$statuses = Kanban_Utils::order_array_of_objects_by_property ( $statuses, 'position', 'int' );
+		$statuses = Kanban_Utils::order_array_of_objects_by_property( $statuses, 'position', 'int' );
 
 		$estimates = Kanban_Estimate::get_all();
-		$estimates = Kanban_Utils::order_array_of_objects_by_property ( $estimates, 'position', 'int' );
+		$estimates = Kanban_Utils::order_array_of_objects_by_property( $estimates, 'position', 'int' );
 
 		$template = Kanban_Template::find_template( 'admin/settings' );
 
@@ -269,13 +269,13 @@ class Kanban_Option extends Kanban_Db
 
 
 		$current_board = Kanban_Board::get_current(
-			isset($_POST['board_id']) ? $_POST['board_id'] : NULL
+			isset( $_POST['board_id'] ) ? $_POST['board_id'] : NULL
 		);
 
 
 
 		// get current settings
-		$settings = Kanban_Option::get_all($current_board->id);
+		$settings = Kanban_Option::get_all( $current_board->id );
 
 
 
@@ -283,9 +283,9 @@ class Kanban_Option extends Kanban_Db
 		foreach ( $_POST['settings'] as $key => $value )
 		{
 			// save licenses, just in case
-			if ( !isset($settings[$key]) && substr($key, 0, 7) != 'license' ) continue;
+			if ( ! isset( $settings[$key] ) && substr( $key, 0, 7 ) != 'license' ) continue;
 
-			Kanban_Option::update($key, $value);
+			Kanban_Option::update( $key, $value );
 		}
 
 

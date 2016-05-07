@@ -56,7 +56,7 @@ class Kanban_Status extends Kanban_Db
 
 		return apply_filters(
 			'kanban_status_get_all_return',
-			Kanban_Utils::build_array_with_id_keys ( $records, 'id' )
+			Kanban_Utils::build_array_with_id_keys( $records, 'id' )
 		);
 	}
 
@@ -68,7 +68,7 @@ class Kanban_Status extends Kanban_Db
 	{
 		if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-options' ) || ! is_user_logged_in() ) return;
 
-		if ( !isset($_POST['statuses']) ) return;
+		if ( ! isset( $_POST['statuses'] ) ) return;
 
 
 
@@ -77,12 +77,12 @@ class Kanban_Status extends Kanban_Db
 
 
 		$current_board = Kanban_Board::get_current(
-			isset($_POST['board_id']) ? $_POST['board_id'] : NULL
+			isset( $_POST['board_id'] ) ? $_POST['board_id'] : NULL
 		);
 
 
 
-		$statuses = Kanban_Status::get_all();
+		$statuses   = Kanban_Status::get_all();
 		$status_ids = array_keys( $statuses );
 
 
@@ -110,7 +110,7 @@ class Kanban_Status extends Kanban_Db
 			{
 				$status['board_id'] = $current_board->id;
 				// save it
-				$success = Kanban_Status::replace( $status );
+				$success            = Kanban_Status::replace( $status );
 
 				if ( $success )
 				{
@@ -129,7 +129,7 @@ class Kanban_Status extends Kanban_Db
 		{
 			foreach ( $_POST['statuses']['saved'] as $status_id => $status )
 			{
-				$status['id'] = $status_id;
+				$status['id']       = $status_id;
 				$status['board_id'] = $current_board->id;
 
 				Kanban_Status::replace( $status );

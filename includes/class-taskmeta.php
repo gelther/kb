@@ -33,7 +33,7 @@ class Kanban_Taskmeta extends Kanban_Db
 
 
 		// delete existing record
-		self::delete($task_id, $meta_key);
+		self::delete( $task_id, $meta_key );
 
 
 

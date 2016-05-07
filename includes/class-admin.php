@@ -227,7 +227,7 @@ class Kanban_Admin
 				.fail( function( data )
 				{
 					migration_failed();
-					return false;
+					return FALSE;
 				} );
 			}; // do_migrate
 
@@ -278,7 +278,7 @@ class Kanban_Admin
 		global $wpdb;
 
 		$current_user_id = get_current_user_id();
-		$lastRun = (int) Kanban_Option::get_option( 'admin-addons-check' );
+		$lastRun         = (int) Kanban_Option::get_option( 'admin-addons-check' );
 
 		if ( time() - $lastRun >= 60*60*24 ) // 1 day
 		{
@@ -339,7 +339,7 @@ class Kanban_Admin
 
 	static function contact_support()
 	{
-		if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-admin-comment' ) || ! is_user_logged_in() ) return false;
+		if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-admin-comment' ) || ! is_user_logged_in() ) return FALSE;
 
 		try
 		{
@@ -365,73 +365,73 @@ class Kanban_Admin
 
 
 
-	static function ajax_register_user ()
+	static function ajax_register_user()
 	{
-		if ( !wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-new-user') ) return;
+		if ( ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-new-user' ) ) return;
 
-		$user_login		= $_POST["new-user-login"];	
-		$user_email		= $_POST["new-user-email"];
-		$user_first 	= $_POST["new-user-first"];
-		$user_last	 	= $_POST["new-user-last"];
+		$user_login = $_POST['new-user-login'];
+		$user_email = $_POST['new-user-email'];
+		$user_first = $_POST['new-user-first'];
+		$user_last  = $_POST['new-user-last'];
 
 		$errors = array();
 
-		if(username_exists($user_login))
+		if ( username_exists( $user_login ) )
 		{
-			$errors[] = __('Username already taken');
+			$errors[] = __( 'Username already taken' );
 		}
 
-		if(!validate_username($user_login))
+		if ( ! validate_username( $user_login ) )
 		{
-			$errors[] = __('Invalid username');
+			$errors[] = __( 'Invalid username' );
 		}
 
-		if($user_login == '')
+		if ( $user_login == '' )
 		{
-			$errors[] = __('Please enter a username');
+			$errors[] = __( 'Please enter a username' );
 		}
 
-		if(!is_email($user_email))
+		if ( ! is_email( $user_email ) )
 		{
 
-			$errors[] = __('Invalid email');
+			$errors[] = __( 'Invalid email' );
 		}
 
-		if(email_exists($user_email))
+		if ( email_exists( $user_email ) )
 		{
-			$errors[] = __('Email already registered');
+			$errors[] = __( 'Email already registered' );
 		}
 
-		if ( !empty($errors) ) 
+		if ( ! empty( $errors ) )
 		{
-			wp_send_json_error(array('error' => implode('<br>', $errors)));
+			wp_send_json_error( array( 'error' => implode( '<br>', $errors ) ) );
 			return;
 		}
 
 
 
 		$userdata = array(
-			'user_login'  =>  $user_login,
-			'user_email'  =>  $user_email,
-			'first_name'  =>  $user_first,
+			'user_login' =>  $user_login,
+			'user_email' =>  $user_email,
+			'first_name' =>  $user_first,
 			'last_name'  =>  $user_last,
-			'user_pass'   =>  NULL  // When creating an user, `user_pass` is expected.
+			'user_pass'  =>  NULL  // When creating an user, `user_pass` is expected.
 		);
 
 		$user_id = wp_insert_user( $userdata ) ;
 
 
 
-		if ( is_wp_error($user_id) )
+		if ( is_wp_error( $user_id ) )
 		{
-			wp_send_json_error(array('error' => 'User could not be created. Please use the User > Add New page'));
+			wp_send_json_error( array( 'error' => 'User could not be created. Please use the User > Add New page' ) );
 			return;
 		}
 
 
 
 		// add new user to allowed users
-		$allowed_users = Kanban_Option::get_option( 'allowed_users' );
+		$allowed_users   = Kanban_Option::get_option( 'allowed_users' );
 		$allowed_users[] = $user_id;
 
 		Kanban_Option::update( 'allowed_users', $allowed_users );
@@ -439,18 +439,18 @@ class Kanban_Admin
 
 
 		// send an email to the admin alerting them of the registration
-		wp_new_user_notification($user_id, NULL, 'both');
+		wp_new_user_notification( $user_id, NULL, 'both' );
 
 
 
-		wp_send_json_success(array('new_user_id' => $user_id));
+		wp_send_json_success( array( 'new_user_id' => $user_id ) );
 	}
 
 
 
 	/**
 	 * add pages to admin menu, including custom icon
-	 * @return   [type] [description]
+	 * @return [type] [description]
 	 */
 	static function admin_menu()
 	{

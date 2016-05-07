@@ -50,7 +50,7 @@ class Kanban_Project extends Kanban_Db
 
 		if ( ! isset( $_POST['project']['id'] ) )
 		{
-			$_POST['project']['id'] = '';
+			$_POST['project']['id']             = '';
 			$_POST['project']['created_dt_gmt'] = Kanban_Utils::mysql_now_gmt();
 		}
 
@@ -61,7 +61,7 @@ class Kanban_Project extends Kanban_Db
 
 
 		$_POST['project']['modified_dt_gmt'] = Kanban_Utils::mysql_now_gmt();
-		$_POST['project']['user_id_author'] = get_current_user_id();
+		$_POST['project']['user_id_author']  = get_current_user_id();
 
 
 
@@ -86,7 +86,7 @@ class Kanban_Project extends Kanban_Db
 		if ( $is_successful )
 		{
 			wp_send_json_success( array(
-				'message' => sprintf( '%s saved', self::$slug ),
+				'message'   => sprintf( '%s saved', self::$slug ),
 				self::$slug => $post_data
 			) );
 		}
@@ -154,7 +154,7 @@ class Kanban_Project extends Kanban_Db
 
 	static function get_all( $sql = NULL )
 	{
-		$table_name = self::table_name();
+		$table_name       = self::table_name();
 		$tasks_table_name = Kanban_Task::table_name();
 
 		$sql = "SELECT `projects`.*,
@@ -180,7 +180,7 @@ class Kanban_Project extends Kanban_Db
 
 		return apply_filters(
 			'kanban_project_get_all_return',
-			Kanban_Utils::build_array_with_id_keys ( $records, 'id' )
+			Kanban_Utils::build_array_with_id_keys( $records, 'id' )
 		);
 	}
 
