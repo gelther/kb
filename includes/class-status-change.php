@@ -88,10 +88,8 @@ class Kanban_Status_Change extends Kanban_Db
 
 
 
-	static function add( $task_id, $status_id_new, $status_id_old = 0, $user_id_author = NULL )
-	{
-		if ( ! $user_id_author )
-		{
+	static function add( $task_id, $status_id_new, $status_id_old = 0, $user_id_author = NULL ) {
+		if ( ! $user_id_author ) {
 			$user_id_author = get_current_user_id();
 		}
 
@@ -111,8 +109,7 @@ class Kanban_Status_Change extends Kanban_Db
 
 
 	// define the db schema
-	static function db_table()
-	{
+	static function db_table() {
 		return 'CREATE TABLE ' . self::table_name() . ' (
 					id bigint(20) NOT NULL AUTO_INCREMENT,
 					task_id bigint(20) NOT NULL,
@@ -130,10 +127,8 @@ class Kanban_Status_Change extends Kanban_Db
 	 * get the instance of this class
 	 * @return object the instance
 	 */
-	public static function get_instance()
-	{
-		if ( ! self::$instance )
-		{
+	public static function get_instance() {
+		if ( ! self::$instance ) {
 			self::$instance = new self();
 		}
 		return self::$instance;
