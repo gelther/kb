@@ -43,8 +43,7 @@ class Kanban_Comment extends Kanban_Db
 
 
 
-	static function add( $comment, $type = 'system', $task_id = 0, $user_id_author = NULL )
-	{
+	static function add( $comment, $type = 'system', $task_id = 0, $user_id_author = NULL ) {
 
 
 		do_action( 'kanban_comment_add_before' );
@@ -52,8 +51,7 @@ class Kanban_Comment extends Kanban_Db
 
 
 
-		if ( ! $user_id_author )
-		{
+		if ( ! $user_id_author ) {
 			$user_id_author = get_current_user_id();
 		}
 
@@ -83,15 +81,13 @@ class Kanban_Comment extends Kanban_Db
 
 
 	// extend parent, so it's accessible from other classes
-	static function insert( $data )
-	{
+	static function insert( $data ) {
 		return self::_insert( $data );
 	}
 
 
 
-	static function get_all( $sql = NULL )
-	{
+	static function get_all( $sql = NULL ) {
 		$table_name = self::table_name();
 
 		$sql = "SELECT *
@@ -104,7 +100,7 @@ class Kanban_Comment extends Kanban_Db
 
 		return apply_filters(
 			'kanban_comment_get_all_return',
-			Kanban_Utils::build_array_with_id_keys ( $records, 'id' )
+			Kanban_Utils::build_array_with_id_keys( $records, 'id' )
 		);
 	}
 
@@ -112,8 +108,7 @@ class Kanban_Comment extends Kanban_Db
 
 
 	// define the db schema
-	static function db_table()
-	{
+	static function db_table() {
 		return 'CREATE TABLE ' . self::table_name() . ' (
 					id bigint(20) NOT NULL AUTO_INCREMENT,
 					created_dt_gmt datetime NOT NULL,
@@ -132,10 +127,8 @@ class Kanban_Comment extends Kanban_Db
 	 * get the instance of this class
 	 * @return object the instance
 	 */
-	public static function get_instance()
-	{
-		if ( ! self::$instance )
-		{
+	public static function get_instance() {
+		if ( ! self::$instance ) {
 			self::$instance = new self();
 		}
 		return self::$instance;

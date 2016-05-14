@@ -34,16 +34,14 @@ class Kanban_Task_Hour extends Kanban_Db
 
 
 
-	static function init()
-	{
+	static function init() {
 		add_action( sprintf( 'wp_ajax_add_%s', self::$slug ), array( __CLASS__, 'ajax_save' ) );
 	}
 
 
 
-	static function ajax_save()
-	{
-		if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-save' ) || ! is_user_logged_in() ) wp_send_json_error();
+	static function ajax_save() {
+		if ( ! isset( $_POST[ Kanban_Utils::get_nonce() ] ) || ! wp_verify_nonce( $_POST[ Kanban_Utils::get_nonce() ], 'kanban-save' ) || ! is_user_logged_in() ) wp_send_json_error();
 
 
 
@@ -55,8 +53,7 @@ class Kanban_Task_Hour extends Kanban_Db
 
 
 
-		if ( empty( $_POST['user_id_worked'] ) )
-		{
+		if ( empty( $_POST['user_id_worked'] ) ) {
 			$_POST['user_id_worked'] = $user_id_author;
 		}
 
@@ -65,7 +62,7 @@ class Kanban_Task_Hour extends Kanban_Db
 		try
 		{
 			$operator = substr( $_POST['operator'], 0, 1 ) == '-' ? '-' : '+';
-			$val = sprintf( '%s%s', $operator, abs( floatval( $_POST['operator'] ) ) );
+			$val      = sprintf( '%s%s', $operator, abs( floatval( $_POST['operator'] ) ) );
 		}
 		catch ( Exception $e )
 		{
@@ -97,8 +94,7 @@ class Kanban_Task_Hour extends Kanban_Db
 
 
 
-		if ( ! empty( $_POST['comment'] ) )
-		{
+		if ( ! empty( $_POST['comment'] ) ) {
 			do_action( 'kanban_task_hour_ajax_save_before_comment' );
 
 			Kanban_Comment::add(
@@ -112,14 +108,11 @@ class Kanban_Task_Hour extends Kanban_Db
 
 
 
-		if ( $is_successful )
-		{
+		if ( $is_successful ) {
 			wp_send_json_success( array(
 				'message' => sprintf( '%s saved', str_replace( '_', ' ', self::$slug ) )
 			) );
-		}
-		else
-		{
+		} else {
 			wp_send_json_error( array(
 				'message' => sprintf( 'Error saving %s', str_replace( '_', ' ', self::$slug ) )
 			) );
@@ -129,16 +122,14 @@ class Kanban_Task_Hour extends Kanban_Db
 
 
 	// extend parent, so it's accessible from other classes
-	static function insert( $data )
-	{
+	static function insert( $data ) {
 		return self::_insert( $data );
 	}
 
 
 
 	// define the db schema
-	static function db_table()
-	{
+	static function db_table() {
 		return 'CREATE TABLE ' . self::table_name() . ' (
 					id bigint(20) NOT NULL AUTO_INCREMENT,
 					task_id bigint(20) NOT NULL,
@@ -157,10 +148,8 @@ class Kanban_Task_Hour extends Kanban_Db
 	 * get the instance of this class
 	 * @return object the instance
 	 */
-	public static function get_instance()
-	{
-		if ( ! self::$instance )
-		{
+	public static function get_instance() {
+		if ( ! self::$instance ) {
 			self::$instance = new self();
 		}
 		return self::$instance;

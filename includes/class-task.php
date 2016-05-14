@@ -39,31 +39,23 @@ class Kanban_Task extends Kanban_Db
 
 
 
-	static function init()
-	{
+	static function init() {
 		add_action( sprintf( 'wp_ajax_save_%s', self::$slug ), array( __CLASS__, 'ajax_save' ) );
 		add_action( sprintf( 'wp_ajax_delete_%s', self::$slug ), array( __CLASS__, 'ajax_delete' ) );
 	}
 
 
 
-	static function format_hours( $hours )
-	{
-		if ( $hours < 0 )
-		{
+	static function format_hours( $hours ) {
+		if ( $hours < 0 ) {
 			$hours = 0;
 		}
 
-		if ( $hours < 1 )
-		{
+		if ( $hours < 1 ) {
 			$label = sprintf( '%sm', ceil( $hours*60/100));
-		}
-		elseif ( $hours < 8 )
-		{
+		} elseif ( $hours < 8 ) {
 			$label = sprintf( '%sh', $hours );
-		}
-		else
-		{
+		} else {
 			$label = sprintf( '%sd %sh', floor( $hours/8 ), $hours % 8 );
 		}
 
@@ -72,15 +64,13 @@ class Kanban_Task extends Kanban_Db
 
 
 
-	static function ajax_save()
-	{
-		if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-save' ) || ! is_user_logged_in() ) wp_send_json_error();
+	static function ajax_save() {
+		if ( ! isset( $_POST[ Kanban_Utils::get_nonce() ] ) || ! wp_verify_nonce( $_POST[ Kanban_Utils::get_nonce() ], 'kanban-save' ) || ! is_user_logged_in() ) wp_send_json_error();
 
 
 
-		if ( ! isset( $_POST['task']['id'] ) )
-		{
-			$_POST['task']['id'] = '';
+		if ( ! isset( $_POST['task']['id'] ) ) {
+			$_POST['task']['id']             = '';
 			$_POST['task']['created_dt_gmt'] = Kanban_Utils::mysql_now_gmt();
 		}
 
@@ -94,8 +84,7 @@ class Kanban_Task extends Kanban_Db
 
 
 
-		if ( ! isset( $_POST['task']['user_id_author'] ) )
-		{
+		if ( ! isset( $_POST['task']['user_id_author'] ) ) {
 			$_POST['task']['user_id_author'] = get_current_user_id();
 		}
 
@@ -119,8 +108,7 @@ class Kanban_Task extends Kanban_Db
 
 
 
-		if ( ! empty( $_POST['comment'] ) )
-		{
+		if ( ! empty( $_POST['comment'] ) ) {
 			do_action( 'kanban_task_ajax_save_before_comment' );
 
 			Kanban_Comment::add(
@@ -134,8 +122,7 @@ class Kanban_Task extends Kanban_Db
 
 
 
-		if ( isset( $_POST['status_id_old'] ) )
-		{
+		if ( isset( $_POST['status_id_old'] ) ) {
 			do_action( 'kanban_task_ajax_save_before_status_change' );
 
 			Kanban_Status_Change::add(
@@ -149,15 +136,12 @@ class Kanban_Task extends Kanban_Db
 
 
 
-		if ( $is_successful )
-		{
+		if ( $is_successful ) {
 			wp_send_json_success( array(
-				'message' => sprintf( '%s saved', self::$slug ),
+				'message'   => sprintf( '%s saved', self::$slug ),
 				self::$slug => $post_data
 			) );
-		}
-		else
-		{
+		} else {
 			wp_send_json_error( array(
 				'message' => sprintf( 'Error saving %s', self::$slug )
 			) );
@@ -166,9 +150,8 @@ class Kanban_Task extends Kanban_Db
 
 
 
-	static function ajax_delete()
-	{
-		if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-save' ) || ! is_user_logged_in() ) wp_send_json_error();
+	static function ajax_delete() {
+		if ( ! isset( $_POST[ Kanban_Utils::get_nonce() ] ) || ! wp_verify_nonce( $_POST[ Kanban_Utils::get_nonce() ], 'kanban-save' ) || ! is_user_logged_in() ) wp_send_json_error();
 
 
 
@@ -185,8 +168,7 @@ class Kanban_Task extends Kanban_Db
 
 
 
-		if ( ! empty( $_POST['comment'] ) )
-		{
+		if ( ! empty( $_POST['comment'] ) ) {
 			do_action( 'kanban_task_ajax_delete_before_comment' );
 
 			Kanban_Comment::add(
@@ -200,14 +182,11 @@ class Kanban_Task extends Kanban_Db
 
 
 
-		if ( $is_successful )
-		{
+		if ( $is_successful ) {
 			wp_send_json_success( array(
 				'message' => sprintf( '%s deleted', self::$slug )
 			) );
-		}
-		else
-		{
+		} else {
 			wp_send_json_error( array(
 				'message' => sprintf( 'Error deleting %s', self::$slug )
 			) );
@@ -217,16 +196,14 @@ class Kanban_Task extends Kanban_Db
 
 
 	// extend parent, so it's accessible from other classes
-	static function replace( $data )
-	{
+	static function replace( $data ) {
 		return self::_replace( $data );
 	}
 
 
 
 	// extend parent, so it's accessible from other classes
-	protected static function delete( $id )
-	{
+	protected static function delete( $id ) {
 		return self::_update(
 			array( 'is_active' => 0 ),
 			array( 'id' => $id )
@@ -234,10 +211,9 @@ class Kanban_Task extends Kanban_Db
 	}
 
 
-	static function get_one( $task_id )
-	{
-		$record = parent::get_row( 'ID', $task_id );
-		$record->title = Kanban_Utils::str_for_frontend( $record->title );
+	static function get_one( $task_id ) {
+		$record              = parent::get_row( 'ID', $task_id );
+		$record->title       = Kanban_Utils::str_for_frontend( $record->title );
 		$record->description = Kanban_Utils::str_for_frontend( $record->description );
 
 		return apply_filters( 'kanban_task_get_one_return', $record );
@@ -245,8 +221,7 @@ class Kanban_Task extends Kanban_Db
 
 
 
-	static function get_all( $sql = NULL )
-	{
+	static function get_all( $sql = NULL ) {
 		$table_name = self::table_name();
 
 		$worked_table_name = Kanban_Task_Hour::table_name();
@@ -269,10 +244,9 @@ class Kanban_Task extends Kanban_Db
 
 
 
-		foreach ( $records as $key => $record )
-		{
-			$records[$key]->title = Kanban_Utils::str_for_frontend( $records[$key]->title );
-			$records[$key]->description = Kanban_Utils::str_for_frontend( $records[$key]->description );
+		foreach ( $records as $key => $record ) {
+			$records[ $key ]->title = Kanban_Utils::str_for_frontend( $records[ $key ]->title );
+			$records[ $key ]->description = Kanban_Utils::str_for_frontend( $records[ $key ]->description );
 		}
 
 
@@ -286,8 +260,7 @@ class Kanban_Task extends Kanban_Db
 
 
 	// define the db schema
-	static function db_table()
-	{
+	static function db_table() {
 		return 'CREATE TABLE ' . self::table_name() . ' (
 					id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 					title text NOT NULL,
@@ -314,10 +287,8 @@ class Kanban_Task extends Kanban_Db
 	 * get the instance of this class
 	 * @return object the instance
 	 */
-	public static function get_instance()
-	{
-		if ( ! self::$instance )
-		{
+	public static function get_instance() {
+		if ( ! self::$instance ) {
 			self::$instance = new self();
 		}
 		return self::$instance;

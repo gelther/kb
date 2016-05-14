@@ -20,7 +20,7 @@
 	<div class="updated">
 		<p><?php echo $_GET['message']; ?></p>
 	</div>
-<?php endif // message ?>
+<?php endif; // message ?>
 
 
 
@@ -50,7 +50,7 @@
 							</label>
 						</th>
 						<td>
-							<input name="settings[hour_interval]" type="text" id="hour_increment" value="<?php echo isset($settings['hour_interval']) ? $settings['hour_interval'] : 1 ?>" class="regular-text">
+							<input name="settings[hour_interval]" type="text" id="hour_increment" value="<?php echo isset( $settings['hour_interval'] ) ? $settings['hour_interval'] : 1 ?>" class="regular-text">
 							<p class="description">
 								<?php echo __( 'Example: If you want to track work in 10 minute increments, enter ".1667" here.', 'kanban' ); ?>
 							</p>
@@ -148,17 +148,17 @@
 											</th>
 											<td>
 												<fieldset>
-					<?php if ( count($all_users_arr) > 10 ) : ?>
+					<?php if ( count( $all_users_arr ) > 10 ) : ?>
 													<p>
 														Filter: <input type="text" class="users-filter">
 													</p>
-					<?php endif // count $all_users_arr ?>
+					<?php endif; // count $all_users_arr ?>
 					<?php foreach ( $all_users_arr as $user_id => $user_name ) : ?>
 													<label style="display: block;">
 														<input name="settings[allowed_users][]" type="checkbox" value="<?php echo $user_id; ?>" <?php echo isset( $settings['allowed_users'] ) ? in_array( $user_id, $settings['allowed_users'] ) ? 'checked' : '' : ''; ?>>
 														<?php echo $user_name; ?>
 													</label>
-					<?php endforeach // $all_users_arr; ?>
+					<?php endforeach; // $all_users_arr; ?>
 												</fieldset>
 											</td>
 										</tr>
@@ -175,7 +175,7 @@
 													<option value="<?php echo $user_id; ?>" <?php echo isset( $settings['default_assigned_to'] ) ? $user_id == $settings['default_assigned_to'] ? 'selected' : '' : ''; ?>>
 														<?php echo $user_name; ?>
 													</option>
-					<?php endforeach // $all_users_arr; ?>
+					<?php endforeach; // $all_users_arr; ?>
 													<option value="" <?php echo ! isset( $settings['default_assigned_to'] ) || empty( $settings['default_assigned_to'] ) ? 'selected' : ''; ?>>
 														No one
 													</option>
@@ -216,7 +216,7 @@
 											<?php echo __( 'Note: user will immediately be added to the Kanban board.', 'kanban' ); ?>
 										</i>
 									</p>
-									<?php echo Kanban_Template::render_template( 'admin/users-form-registration'); ?>
+									<?php echo Kanban_Template::render_template( 'admin/users-form-registration' ); ?>
 								</div>
 
 							</div>
@@ -236,7 +236,7 @@
 			<ol id="list-statuses" class="sortable">
 <?php foreach ( $statuses as $status_id => $status ) : ?>
 				<?php echo Kanban_Template::render_template( 'admin/t-status', (array) $status ); ?>
-<?php endforeach // statuses ?>
+<?php endforeach; // statuses ?>
 			</ol><!-- sortable -->
 			<p>
 				<button type="button" class="button" id="add-status">
@@ -258,7 +258,7 @@
 			<ol id="list-estimates" class="sortable">
 <?php foreach ( $estimates as $estimate_id => $estimate ) : ?>
 				<?php echo Kanban_Template::render_template( 'admin/t-estimate', (array) $estimate ); ?>
-<?php endforeach // statuses ?>
+<?php endforeach; // statuses ?>
 			</ol><!-- sortable -->
 			<p>
 				<button type="button" class="button" id="add-estimate">
@@ -281,7 +281,7 @@
 								<option value="<?php echo $estimate->id; ?>" <?php echo isset( $settings['default_estimate'] ) ? $estimate->id == $settings['default_estimate'] ? 'selected' : '' : ''; ?>>
 									<?php echo $estimate->title; ?>
 								</option>
-<?php endforeach // $estimates; ?>
+<?php endforeach; // $estimates; ?>
 								<option value="" <?php echo ! isset( $settings['default_estimate'] ) || empty( $settings['default_estimate'] ) ? 'selected' : ''; ?>>
 									None
 								</option>

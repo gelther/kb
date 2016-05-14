@@ -23,26 +23,26 @@ class Kanban_Template
 		'board' => array(
 			'style'  => array(
 				'bootstrap' => '%sbootstrap/css/bootstrap.min.css', // "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js",
-				'board' => '%scss/board.css'
+				'board'     => '%scss/board.css'
 			),
 			'script' => array(
-				'jquery' => '%sjs/jquery-1.11.3.min.js', // "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js",
-				'jquery-ui' => '%sjs/jquery-ui.min.js', // "//code.jquery.com/ui/1.11.3/jquery-ui.min.js",
-				'bootstrap' => '%sbootstrap/js/bootstrap.min.js', // "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js,
-				'bootstrap-growl' => '%sjs/jquery.bootstrap-growl.min.js', // "//cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js",
+				'jquery'               => '%sjs/jquery-1.11.3.min.js', // "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js",
+				'jquery-ui'            => '%sjs/jquery-ui.min.js', // "//code.jquery.com/ui/1.11.3/jquery-ui.min.js",
+				'bootstrap'            => '%sbootstrap/js/bootstrap.min.js', // "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js,
+				'bootstrap-growl'      => '%sjs/jquery.bootstrap-growl.min.js', // "//cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js",
 				// 'autoresize' => "%sjs/jquery.textarea.autoresize.min.js",
-				'matchHeight' => '%sjs/jquery.matchHeight.min.js',
-				'cookie' => '%sjs/js.cookie.min.js',
-				't' => '%sjs/t.min.js',
-				'board-util' => '%sjs/board-util.min.js',
+				'matchHeight'          => '%sjs/jquery.matchHeight.min.js',
+				'cookie'               => '%sjs/js.cookie.min.js',
+				't'                    => '%sjs/t.min.js',
+				'board-util'           => '%sjs/board-util.min.js',
 				'board-modal-projects' => '%sjs/board-modal-projects.min.js',
 				'board-sidebar-header' => '%sjs/board-sidebar-header.min.js',
 				// 'board-tour' => "%sjs/board-tour.min.js",
-				'board-search' => '%sjs/board-search.min.js',
-				'board-filter' => '%sjs/board-filter.min.js',
-				'board-view' => '%sjs/board-view.min.js',
-				'board-task' => '%sjs/board-task.min.js',
-				'board' => '%sjs/board.min.js'
+				'board-search'         => '%sjs/board-search.min.js',
+				'board-filter'         => '%sjs/board-filter.min.js',
+				'board-view'           => '%sjs/board-view.min.js',
+				'board-task'           => '%sjs/board-task.min.js',
+				'board'                => '%sjs/board.min.js'
 			)
 		),
 		'login' => array(
@@ -54,12 +54,10 @@ class Kanban_Template
 
 
 
-	static function init()
-	{
+	static function init() {
 		add_action( 'init', array( __CLASS__, 'protect_slug' ) );
 
 		add_filter( 'template_include', array( __CLASS__, 'template_chooser' ), 99 );
-
 	}
 
 
@@ -67,10 +65,9 @@ class Kanban_Template
 	/**
 	 * make sure only authenticated users can see our pages
 	 */
-	static function protect_slug()
-	{
+	static function protect_slug() {
 		// only protect pages with our slug
-		if ( strpos( $_SERVER['REQUEST_URI'], sprintf( '/%s/', Kanban::$slug ) ) === FALSE ) return;
+		if ( strpos( $_SERVER['REQUEST_URI'], sprintf( '/%s/', Kanban::$slug ) ) === false ) return;
 
 
 
@@ -86,16 +83,12 @@ class Kanban_Template
 		$allowed_user_ids = Kanban_User::get_allowed_users();
 
 		// return if I'm allowed
-		if ( in_array( $current_user_id, array_keys( $allowed_user_ids ) ) )
-		{
+		if ( in_array( $current_user_id, array_keys( $allowed_user_ids ) ) ) {
 			// redirect away from login
-			if ( strpos( $_SERVER['REQUEST_URI'], sprintf( '/%s/login', Kanban::$slug ) ) !== FALSE )
-			{
+			if ( strpos( $_SERVER['REQUEST_URI'], sprintf( '/%s/login', Kanban::$slug ) ) !== false ) {
 				wp_redirect( sprintf( '%s/%s/board', site_url(), Kanban::$slug ) );
 				exit;
-			}
-			else
-			{
+			} else {
 				return;
 			}
 
@@ -104,7 +97,7 @@ class Kanban_Template
 
 
 		// allow for addition checks
-		$can_view = apply_filters ( 'kanban_template_protect_slug_check', FALSE );
+		$can_view = apply_filters( 'kanban_template_protect_slug_check', false );
 
 
 
@@ -113,21 +106,18 @@ class Kanban_Template
 
 
 		// anyone can see login screen
-		if ( strpos( $_SERVER['REQUEST_URI'], sprintf( '/%s/login', Kanban::$slug ) ) !== FALSE ) return;
+		if ( strpos( $_SERVER['REQUEST_URI'], sprintf( '/%s/login', Kanban::$slug ) ) !== false ) return;
 
 
 
 		// otherwise redirect to login
-		$use_default_login_page = Kanban_Option::get_option('use_default_login_page');
+		$use_default_login_page = Kanban_Option::get_option( 'use_default_login_page' );
 
-		if ( (bool) $use_default_login_page )
-		{
-			wp_redirect( 
-				wp_login_url(sprintf( '%s/%s/board', site_url(), Kanban::$slug ))
+		if ( (bool) $use_default_login_page ) {
+			wp_redirect(
+				wp_login_url( sprintf( '%s/%s/board', site_url(), Kanban::$slug ) )
 			);
-		}
-		else
-		{
+		} else {
 			// otherwise redirect to login
 			wp_redirect( sprintf( '%s/%s/login', site_url(), Kanban::$slug ) );
 		}
@@ -142,14 +132,13 @@ class Kanban_Template
 	 * @param  string $template the template being passed
 	 * @return string           the template found (or not found)
 	 */
-	static function template_chooser( $template )
-	{
+	static function template_chooser( $template ) {
 		if ( is_admin() ) return $template;
 
 
 
 		// if url doesn't include our slug, return
-		if ( strpos( $_SERVER['REQUEST_URI'], sprintf( '/%s/', Kanban::$slug ) ) === FALSE ) return $template;
+		if ( strpos( $_SERVER['REQUEST_URI'], sprintf( '/%s/', Kanban::$slug ) ) === false ) return $template;
 
 
 
@@ -157,54 +146,42 @@ class Kanban_Template
 
 
 
-		foreach ( self::$page_slugs as $slug => $data )
-		{
-			if ( strpos( strtok( $_SERVER['REQUEST_URI'], '?' ), sprintf( '%s/%s', Kanban::$slug, $slug ) ) !== FALSE )
-			{
+		foreach ( self::$page_slugs as $slug => $data ) {
+			if ( strpos( strtok( $_SERVER['REQUEST_URI'], '?' ), sprintf( '%s/%s', Kanban::$slug, $slug ) ) !== false ) {
 				$template = Kanban_Template::find_template( $slug );
 
-				if ( ! empty( $template ) )
-				{
+				if ( ! empty( $template ) ) {
 					self::get_instance()->slug = $slug;
 
-					if ( isset( $data['style'] ) )
-					{
-						foreach ( $data['style'] as $handle => $path )
-						{
-							if ( ! isset( self::get_instance()->style ) || ! is_array( self::get_instance()->style ) )
-							{
+					if ( isset( $data['style'] ) ) {
+						foreach ( $data['style'] as $handle => $path ) {
+							if ( ! isset( self::get_instance()->style ) || ! is_array( self::get_instance()->style ) ) {
 								self::get_instance()->style = array();
 							}
 
-							if ( strpos( $path, '%s' ) !== FALSE )
-							{
+							if ( strpos( $path, '%s' ) !== false ) {
 								$path = sprintf( $path, Kanban::get_instance()->settings->uri );
 							}
 
-							self::get_instance()->style[$handle] = $path;
+							self::get_instance()->style[ $handle ] = $path;
 						}
 					}
 
-					if ( isset( $data['script'] ) )
-					{
-						foreach ( $data['script'] as $handle => $path )
-						{
-							if ( isset($_GET['debug']) && $_GET['debug'] == 'script' )
-							{
-								$path = str_replace('.min', '', $path);
+					if ( isset( $data['script'] ) ) {
+						foreach ( $data['script'] as $handle => $path ) {
+							if ( isset( $_GET['debug'] ) && $_GET['debug'] == 'script' ) {
+								$path = str_replace( '.min', '', $path );
 							}
 
-							if ( ! isset( self::get_instance()->script ) || ! is_array( self::get_instance()->script ) )
-							{
+							if ( ! isset( self::get_instance()->script ) || ! is_array( self::get_instance()->script ) ) {
 								self::get_instance()->script = array();
 							}
 
-							if ( strpos( $path, '%s' ) !== FALSE )
-							{
+							if ( strpos( $path, '%s' ) !== false ) {
 								$path = sprintf( $path, Kanban::get_instance()->settings->uri );
 							}
 
-							self::get_instance()->script[$handle] = $path;
+							self::get_instance()->script[ $handle ] = $path;
 						}
 					}
 				}
@@ -227,32 +204,25 @@ class Kanban_Template
 	 * @param  string $basename filename of the template we're looking for
 	 * @return string           fill template path
 	 */
-	static function find_template( $basename )
-	{
+	static function find_template( $basename ) {
 		// look for template in theme/name_of_class
 		$template = sprintf( '%s/%s/%s', get_stylesheet_directory(), Kanban::get_instance()->settings->basename, sprintf( '%s.php', $basename ) );
 
 		// if not found, look for it in the plugin
-		if ( ! is_file( $template ) )
-		{
+		if ( ! is_file( $template ) ) {
 			$template = sprintf( '%s/templates/%s', Kanban::get_instance()->settings->path, sprintf( '%s.php', $basename ) );
 		}
 
 		// if not found, use the theme default
-		if ( ! is_file( $template ) )
-		{
+		if ( ! is_file( $template ) ) {
 			$template = sprintf( '%s/%s', get_stylesheet_directory(), sprintf( '%s.php', $basename ) );
 		}
 
 		// if not found, use the original
-		if ( ! is_file( $template ) )
-		{
-			if ( is_file( $basename ) )
-			{
+		if ( ! is_file( $template ) ) {
+			if ( is_file( $basename ) ) {
 				$template = $basename;
-			}
-			else
-			{
+			} else {
 				$template = false;
 			}
 		}
@@ -268,8 +238,7 @@ class Kanban_Template
 	 * @param  array  $data     the variables to populate
 	 * @return string           the html output
 	 */
-	static function render_template( $basename, $data = array() )
-	{
+	static function render_template( $basename, $data = array() ) {
 		$template_path = Kanban_Template::find_template( $basename );
 
 		if ( ! $template_path ) return false;
@@ -288,12 +257,10 @@ class Kanban_Template
 	/**
 	 * add a css sheet to a kanban template, without using the WordPress queue
 	 */
-	static function add_style()
-	{
+	static function add_style() {
 		if ( ! isset( self::get_instance()->style ) || ! is_array( self::get_instance()->style ) ) return;
 
-		foreach ( self::get_instance()->style as $handle => $path )
-		{
+		foreach ( self::get_instance()->style as $handle => $path ) {
 			echo sprintf(
 				'<link rel="stylesheet" id="%s-css" href="%s?ver=%s">' . "\n",
 				$handle,
@@ -308,12 +275,10 @@ class Kanban_Template
 	/**
 	 * add a js script to a kanban template, without using the WordPress queue
 	 */
-	static function add_script()
-	{
+	static function add_script() {
 		if ( ! isset( self::get_instance()->script ) || ! is_array( self::get_instance()->script ) ) return;
 
-		foreach ( self::get_instance()->script as $handle => $path )
-		{
+		foreach ( self::get_instance()->script as $handle => $path ) {
 			echo sprintf(
 				'<script id="%s-js" src="%s?ver=%s"></script>' . "\n",
 				$handle,
@@ -329,10 +294,8 @@ class Kanban_Template
 	 * get the instance of this class
 	 * @return object the instance
 	 */
-	public static function get_instance()
-	{
-		if ( ! self::$instance )
-		{
+	public static function get_instance() {
+		if ( ! self::$instance ) {
 			self::$instance = new self();
 		}
 		return self::$instance;
