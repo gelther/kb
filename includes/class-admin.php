@@ -23,8 +23,7 @@ class Kanban_Admin
 
 
 
-	static function init()
-	{
+	static function init() {
 		// redirect to welcome screen on activation
 		add_action( 'admin_init', array( __CLASS__, 'welcome_screen_do_activation_redirect' ) );
 
@@ -35,8 +34,7 @@ class Kanban_Admin
 		);
 
 		// Remove Admin bar
-		if ( strpos( $_SERVER['REQUEST_URI'], sprintf( '/%s/', Kanban::$slug ) ) !== FALSE )
-		{
+		if ( strpos( $_SERVER['REQUEST_URI'], sprintf( '/%s/', Kanban::$slug ) ) !== false ) {
 			add_filter( 'show_admin_bar', '__return_false' );
 		}
 
@@ -58,8 +56,7 @@ class Kanban_Admin
 	/**
 	 * show upgrade notice with progress bar
 	 */
-	static function render_upgrade_notice()
-	{
+	static function render_upgrade_notice() {
 		// make sure something needs to be upgraded
 		if ( Kanban::get_instance()->settings->records_to_move <= 0 ) return;
 
@@ -153,14 +150,12 @@ class Kanban_Admin
 			var records_to_move = <?php echo Kanban::get_instance()->settings->records_to_move ?>;
 
 			// if migration fails, show alert
-			function migration_failed()
-			{
+			function migration_failed() {
 				alert( 'Migration failed. Please refresh the page and try again.' );
 			}
 
 			// the loop to continually do migration, and update progress bar
-			function do_migrate()
-			{
+			function do_migrate() {
 				$.post(
 					ajaxurl,
 					{
@@ -173,13 +168,11 @@ class Kanban_Admin
 					{
 						var percentage = 100-( ( 100 * parseInt(data.data.posts_remaining))/records_to_move);
 
-						if ( percentage > 100 )
-						{
+						if ( percentage > 100 ) {
 							percentage = 100;
 						}
 
-						if ( percentage < 1 )
-						{
+						if ( percentage < 1 ) {
 							percentage = 1;
 						}
 
@@ -200,21 +193,15 @@ class Kanban_Admin
 					// wait 2 seconds and do it again
 					try
 					{
-						if ( data.data.continue )
-						{
+						if ( data.data.continue ) {
 							setTimeout( function()
 							{
 								do_migrate();
 							}, 2000 );
-						}
-						else
-						{
-							if ( data.data.done )
-							{
+						} else {
+							if ( data.data.done ) {
 								$( '#kanban-migrate-progress' ).html( '<b style="font-size: 1.618em;">Migration has completed! <a href="<?php echo site_url(); ?>/kanban/board" class="button button-primary" target="_blank">Go to your board</a>.</b>' );
-							}
-							else
-							{
+							} else {
 								migration_failed();
 							}
 						}
@@ -251,8 +238,7 @@ class Kanban_Admin
 	/**
 	 * render the welcome page
 	 */
-	static function welcome_page()
-	{
+	static function welcome_page() {
 		$template = Kanban_Template::find_template( 'admin/welcome' );
 
 		include_once $template;
@@ -263,8 +249,7 @@ class Kanban_Admin
 	/**
 	 * render the welcome page
 	 */
-	static function addons_page()
-	{
+	static function addons_page() {
 
 
 		wp_enqueue_script(
@@ -278,7 +263,7 @@ class Kanban_Admin
 		global $wpdb;
 
 		$current_user_id = get_current_user_id();
-		$lastRun = (int) Kanban_Option::get_option( 'admin-addons-check' );
+		$lastRun         = (int) Kanban_Option::get_option( 'admin-addons-check' );
 
 		if ( time() - $lastRun >= 60*60*24 ) // 1 day
 		{
@@ -296,9 +281,7 @@ class Kanban_Admin
 			}
 
 			Kanban_Option::update( 'admin-addons', $addons );
-		}
-		else
-		{
+		} else {
 			$addons = Kanban_Option::get_option( 'admin-addons' );
 		}
 
@@ -319,8 +302,7 @@ class Kanban_Admin
 
 
 
-	static function contact_page()
-	{
+	static function contact_page() {
 		$template = Kanban_Template::find_template( 'admin/contact' );
 
 		include_once $template;
@@ -328,8 +310,7 @@ class Kanban_Admin
 
 
 
-	static function licenses_page()
-	{
+	static function licenses_page() {
 		$template = Kanban_Template::find_template( 'admin/licenses' );
 
 		include_once $template;
@@ -337,9 +318,8 @@ class Kanban_Admin
 
 
 
-	static function contact_support()
-	{
-		if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-admin-comment' ) || ! is_user_logged_in() ) return false;
+	static function contact_support() {
+		if ( ! isset( $_POST[ Kanban_Utils::get_nonce() ] ) || ! wp_verify_nonce( $_POST[ Kanban_Utils::get_nonce() ], 'kanban-admin-comment' ) || ! is_user_logged_in() ) return false;
 
 		try
 		{
@@ -365,73 +345,65 @@ class Kanban_Admin
 
 
 
-	static function ajax_register_user ()
-	{
-		if ( !wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-new-user') ) return;
+	static function ajax_register_user() {
+		if ( ! wp_verify_nonce( $_POST[ Kanban_Utils::get_nonce() ], 'kanban-new-user' ) ) return;
 
-		$user_login		= $_POST["new-user-login"];	
-		$user_email		= $_POST["new-user-email"];
-		$user_first 	= $_POST["new-user-first"];
-		$user_last	 	= $_POST["new-user-last"];
+		$user_login = $_POST['new-user-login'];
+		$user_email = $_POST['new-user-email'];
+		$user_first = $_POST['new-user-first'];
+		$user_last  = $_POST['new-user-last'];
 
 		$errors = array();
 
-		if(username_exists($user_login))
-		{
-			$errors[] = __('Username already taken');
+		if ( username_exists( $user_login ) ) {
+			$errors[] = __( 'Username already taken' );
 		}
 
-		if(!validate_username($user_login))
-		{
-			$errors[] = __('Invalid username');
+		if ( ! validate_username( $user_login ) ) {
+			$errors[] = __( 'Invalid username' );
 		}
 
-		if($user_login == '')
-		{
-			$errors[] = __('Please enter a username');
+		if ( $user_login == '' ) {
+			$errors[] = __( 'Please enter a username' );
 		}
 
-		if(!is_email($user_email))
-		{
+		if ( ! is_email( $user_email ) ) {
 
-			$errors[] = __('Invalid email');
+			$errors[] = __( 'Invalid email' );
 		}
 
-		if(email_exists($user_email))
-		{
-			$errors[] = __('Email already registered');
+		if ( email_exists( $user_email ) ) {
+			$errors[] = __( 'Email already registered' );
 		}
 
-		if ( !empty($errors) ) 
-		{
-			wp_send_json_error(array('error' => implode('<br>', $errors)));
+		if ( ! empty( $errors ) ) {
+			wp_send_json_error( array( 'error' => implode( '<br>', $errors ) ) );
 			return;
 		}
 
 
 
 		$userdata = array(
-			'user_login'  =>  $user_login,
-			'user_email'  =>  $user_email,
-			'first_name'  =>  $user_first,
+			'user_login' =>  $user_login,
+			'user_email' =>  $user_email,
+			'first_name' =>  $user_first,
 			'last_name'  =>  $user_last,
-			'user_pass'   =>  NULL  // When creating an user, `user_pass` is expected.
+			'user_pass'  =>  NULL  // When creating an user, `user_pass` is expected.
 		);
 
 		$user_id = wp_insert_user( $userdata ) ;
 
 
 
-		if ( is_wp_error($user_id) )
-		{
-			wp_send_json_error(array('error' => 'User could not be created. Please use the User > Add New page'));
+		if ( is_wp_error( $user_id ) ) {
+			wp_send_json_error( array( 'error' => 'User could not be created. Please use the User > Add New page' ) );
 			return;
 		}
 
 
 
 		// add new user to allowed users
-		$allowed_users = Kanban_Option::get_option( 'allowed_users' );
+		$allowed_users   = Kanban_Option::get_option( 'allowed_users' );
 		$allowed_users[] = $user_id;
 
 		Kanban_Option::update( 'allowed_users', $allowed_users );
@@ -439,21 +411,20 @@ class Kanban_Admin
 
 
 		// send an email to the admin alerting them of the registration
-		wp_new_user_notification($user_id, NULL, 'both');
+		wp_new_user_notification( $user_id, NULL, 'both' );
 
 
 
-		wp_send_json_success(array('new_user_id' => $user_id));
+		wp_send_json_success( array( 'new_user_id' => $user_id ) );
 	}
 
 
 
 	/**
 	 * add pages to admin menu, including custom icon
-	 * @return   [type] [description]
+	 * @return [type] [description]
 	 */
-	static function admin_menu()
-	{
+	static function admin_menu() {
 		// Base 64 encoded SVG image.
 		$icon_svg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAPCAYAAAAGRPQsAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QkRFMDQwQTg1NUFFMTFFNUJBRDdBMjA0MjA4NTJFNzEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QkRFMDQwQTk1NUFFMTFFNUJBRDdBMjA0MjA4NTJFNzEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpCREUwNDBBNjU1QUUxMUU1QkFEN0EyMDQyMDg1MkU3MSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpCREUwNDBBNzU1QUUxMUU1QkFEN0EyMDQyMDg1MkU3MSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PokTEeYAAABuSURBVHjaYvz//z8DCMw8fBXCwAHSbbUZgRReNUwMVASD1zAWGGPLuTvWDIwMf2GBwsiACKJ//xn/AcOMYfq+C5r/GRj//QPJM8JU/AfTf/4x/GccjYBBEpudm48zEogABqWyOXjVjMYm6QAgwADj+y/EHS5dLQAAAABJRU5ErkJggg==';
 
@@ -512,8 +483,7 @@ class Kanban_Admin
 
 
 
-	static function add_admin_bar_link_to_board( $wp_admin_bar )
-	{
+	static function add_admin_bar_link_to_board( $wp_admin_bar ) {
 		$args = array(
 			'id'    => 'kanban_board',
 			'title' => 'Kanban Board',
@@ -526,8 +496,7 @@ class Kanban_Admin
 
 
 	// add the settings page link on the plugins page
-	static function add_plugin_settings_link( $links )
-	{
+	static function add_plugin_settings_link( $links ) {
 		$url = admin_url(
 			sprintf(
 				'admin.php?page=%s',
@@ -549,11 +518,9 @@ class Kanban_Admin
 
 	// redirect to welcome page
 	// @link http://premium.wpmudev.org/blog/tabbed-interface/
-	static function welcome_screen_do_activation_redirect()
-	{
+	static function welcome_screen_do_activation_redirect() {
 		// Bail if no activation redirect
-		if ( ! get_transient( sprintf( '_%s_welcome_screen_activation_redirect', Kanban::get_instance()->settings->basename ) ) )
-		{
+		if ( ! get_transient( sprintf( '_%s_welcome_screen_activation_redirect', Kanban::get_instance()->settings->basename ) ) ) {
 			return;
 		}
 
@@ -561,8 +528,7 @@ class Kanban_Admin
 		delete_transient( sprintf( '_%s_welcome_screen_activation_redirect', Kanban::get_instance()->settings->basename ) );
 
 		// Bail if activating from network, or bulk
-		if ( is_network_admin() || isset( $_GET['activate-multi'] ) )
-		{
+		if ( is_network_admin() || isset( $_GET['activate-multi'] ) ) {
 			return;
 		}
 
@@ -584,10 +550,8 @@ class Kanban_Admin
 	 * get the instance of this class
 	 * @return object the instance
 	 */
-	public static function get_instance()
-	{
-		if ( ! self::$instance )
-		{
+	public static function get_instance() {
+		if ( ! self::$instance ) {
 			self::$instance = new self();
 		}
 		return self::$instance;
@@ -599,7 +563,5 @@ class Kanban_Admin
 	 * construct that can't be overwritten
 	 */
 	private function __construct() { }
-
-
 
 } // Kanban_Admin
