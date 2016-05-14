@@ -17,8 +17,7 @@ abstract class Kanban_Db
 
 
 
-	static function init()
-	{
+	static function init() {
 		add_action( 'plugins_loaded', array( __CLASS__, 'check_for_updates' ) );
 
 		add_action( 'wp_ajax_kanban_migrate_db', array( __CLASS__, 'ajax_migrate_records' ) );
@@ -26,8 +25,7 @@ abstract class Kanban_Db
 
 
 
-	private static function _fetch_sql( $key, $value )
-	{
+	private static function _fetch_sql( $key, $value ) {
 		global $wpdb;
 		$sql = sprintf(
 			'SELECT * FROM %s WHERE %s = %%s',
@@ -41,8 +39,7 @@ abstract class Kanban_Db
 
 
 
-	protected static function get_row( $key, $value )
-	{
+	protected static function get_row( $key, $value ) {
 		global $wpdb;
 		return $wpdb->get_row( self::_fetch_sql( $key, $value ) );
 	}
@@ -50,8 +47,7 @@ abstract class Kanban_Db
 
 
 
-	protected static function get_all( $sql )
-	{
+	protected static function get_all( $sql ) {
 		global $wpdb;
 		$records = $wpdb->get_results( $sql, OBJECT );
 
@@ -61,19 +57,15 @@ abstract class Kanban_Db
 
 
 
-	protected static function _replace( $data )
-	{
+	protected static function _replace( $data ) {
 		$data = self::sanitize_data( $data );
 
-		if ( isset( $data->data['id'] ) && (int) $data->data['id'] > 0 )
-		{
+		if ( isset( $data->data['id'] ) && (int) $data->data['id'] > 0 ) {
 			$success = (bool) self::_update(
 						$data->data,
 						array( 'id' => $data->data['id'] )
 					);
-		}
-		else
-		{
+		} else {
 			$success = (bool) self::_insert( $data->data );
 		}
 
@@ -82,8 +74,7 @@ abstract class Kanban_Db
 
 
 
-	protected static function _insert( $data )
-	{
+	protected static function _insert( $data ) {
 		$data = self::sanitize_data( $data );
 
 		global $wpdb;
@@ -94,8 +85,7 @@ abstract class Kanban_Db
 
 
 
-	protected static function _update( $data, $where )
-	{
+	protected static function _update( $data, $where ) {
 		$data = self::sanitize_data( $data );
 
 		global $wpdb;
@@ -106,8 +96,7 @@ abstract class Kanban_Db
 
 
 
-	protected static function _delete( $where )
-	{
+	protected static function _delete( $where ) {
 		global $wpdb;
 		$success = $wpdb->delete( static::table_name(), $where );
 	}
@@ -115,70 +104,61 @@ abstract class Kanban_Db
 
 
 	// get last inserted id
-	protected static function _insert_id()
-	{
+	protected static function _insert_id() {
 		global $wpdb;
 		return $wpdb->insert_id;
 	}
 
 
 
-	static function time_to_date( $time )
-	{
+	static function time_to_date( $time ) {
 		return gmdate( 'Y-m-d H:i:s', $time );
 	}
 
 
 
-	static function now()
-	{
+	static function now() {
 		return self::time_to_date( time() );
 	}
 
 
 
-	static function date_to_time( $date )
-	{
+	static function date_to_time( $date ) {
 		return strtotime( $date . ' GMT' );
 	}
 
 
 
-	public static function table_name()
-	{
+	public static function table_name() {
 		return Kanban_Db::format_table_name( static::$table_name );
 	}
 
 
 
-	static function sanitize_data( $data )
-	{
+	static function sanitize_data( $data ) {
 		$good_data = array();
-		$format = array();
-		foreach ( $data as $key => $value )
-		{
-			if ( $key == 'id' )
-			{
+		$format    = array();
+		foreach ( $data as $key => $value ) {
+			if ( $key == 'id' ) {
 				if ( ! is_numeric( $value ) ) continue;
 
 				$value = intval( $value );
 				if ( empty( $value ) ) continue;
 
-				$good_data[$key] = $value;
-				$format[] = '%d';
+				$good_data[ $key ] = $value;
+				$format[]          = '%d';
 
 				continue;
 			}
 
-			if ( ! isset( static::$table_columns[$key] ) ) continue;
+			if ( ! isset( static::$table_columns[ $key ] ) ) continue;
 
-			switch ( static::$table_columns[$key] )
-			{
+			switch ( static::$table_columns[ $key ] ) {
 				case 'bool':
 					$value = (bool) $value;
 
-					$good_data[$key] = $value;
-					$format[] = '%d';
+					$good_data[ $key ] = $value;
+					$format[]          = '%d';
 
 					break;
 
@@ -190,8 +170,8 @@ abstract class Kanban_Db
 					$value = floatval( $value );
 					if ( empty( $value ) ) continue;
 
-					$good_data[$key] = $value;
-					$format[] = '%f';
+					$good_data[ $key ] = $value;
+					$format[]          = '%f';
 
 					break;
 
@@ -204,32 +184,29 @@ abstract class Kanban_Db
 
 					if ( ! is_int( $value ) ) continue;
 
-					$good_data[$key] = $value;
-					$format[] = '%d';
+					$good_data[ $key ] = $value;
+					$format[]          = '%d';
 
 					break;
 
 
 
 				case 'text':
-					$good_data[$key] = sanitize_text_field( $value );
-					$format[] = '%s';
+					$good_data[ $key ] = sanitize_text_field( $value );
+					$format[]          = '%s';
 
 					break;
 
 
 
 				case 'datetime':
-					if ( is_a( $value, 'DateTime' ) )
-					{
-						$good_data[$key] = $value->format( 'Y-m-d H:i:s' );
-						$format[] = '%s';
-					}
-					elseif ( ($timestamp = strtotime( $value )) !== FALSE )
-					{
-						$dt = new DateTime( $value );
-						$good_data[$key] = $dt->format( 'Y-m-d H:i:s' );
-						$format[] = '%s';
+					if ( is_a( $value, 'DateTime' ) ) {
+						$good_data[ $key ] = $value->format( 'Y-m-d H:i:s' );
+						$format[]          = '%s';
+					} elseif ( ($timestamp = strtotime( $value )) !== false ) {
+						$dt                = new DateTime( $value );
+						$good_data[ $key ] = $dt->format( 'Y-m-d H:i:s' );
+						$format[]          = '%s';
 					}
 
 					break;
@@ -243,8 +220,6 @@ abstract class Kanban_Db
 			'data'   => $good_data,
 			'format' => $format
 		);
-
-
 	}
 
 
@@ -252,9 +227,8 @@ abstract class Kanban_Db
 	/**
 	 * @link http://mac-blog.org.ua/wordpress-custom-database-table-example-full/
 	 */
-	static function check_for_updates()
-	{
-		if ( version_compare(self::installed_ver(), Kanban::get_instance()->settings->plugin_data['Version']) === 0 ) return FALSE;
+	static function check_for_updates() {
+		if ( version_compare( self::installed_ver(), Kanban::get_instance()->settings->plugin_data['Version'] ) === 0 ) return false;
 
 		global $charset_collate, $wpdb;
 
@@ -273,8 +247,7 @@ abstract class Kanban_Db
 			'Kanban_Task_Hour'
 		);
 
-		foreach ( $classes_with_tables as $class )
-		{
+		foreach ( $classes_with_tables as $class ) {
 			$sql = $class::db_table();
 
 			$sql = sprintf( '%s %s;', $sql, $charset_collate );
@@ -307,8 +280,7 @@ abstract class Kanban_Db
 			'Kanban_Task',
 		);
 
-		foreach ( $classes_with_board_id as $class )
-		{
+		foreach ( $classes_with_board_id as $class ) {
 			$table = $class::table_name();
 
 			$sql = "UPDATE $table
@@ -324,13 +296,12 @@ abstract class Kanban_Db
 
 
 		// save db version to avoid updates
-		update_option('kanban_db_version', Kanban::get_instance()->settings->plugin_data['Version'] );
+		update_option( 'kanban_db_version', Kanban::get_instance()->settings->plugin_data['Version'] );
 	}
 
 
 
-	static function migrate_records_remaining()
-	{
+	static function migrate_records_remaining() {
 		global $wpdb;
 
 		$count = $wpdb->get_var(
@@ -358,10 +329,9 @@ abstract class Kanban_Db
 	 * delete projects
 	 * delete terms
 	 * clean up
-	 * @return   [type] [description]
+	 * @return [type] [description]
 	 */
-	static function ajax_migrate_records()
-	{
+	static function ajax_migrate_records() {
 		global $wpdb;
 
 
@@ -369,8 +339,8 @@ abstract class Kanban_Db
 		// build response
 		$response = array(
 			'posts_remaining' => Kanban::get_instance()->settings->records_to_move,
-			'continue'        => FALSE,
-			'done'            => FALSE
+			'continue'        => false,
+			'done'            => false
 		);
 
 
@@ -378,8 +348,7 @@ abstract class Kanban_Db
 		// check for users to move
 		$is_users_moved = get_option( 'kanban_migrate_users_moved' );
 
-		if ( ! $is_users_moved )
-		{
+		if ( ! $is_users_moved ) {
 			$sql = "SELECT
 					{$wpdb->prefix}options.option_value
 					FROM {$wpdb->prefix}options
@@ -388,8 +357,7 @@ abstract class Kanban_Db
 
 			$users = $wpdb->get_var( $sql );
 
-			if ( ! empty( $users ) )
-			{
+			if ( ! empty( $users ) ) {
 				$users = unserialize( $users );
 
 				$data = array(
@@ -402,11 +370,11 @@ abstract class Kanban_Db
 				delete_option( 'kanban_user' );
 			}
 
-			update_option( 'kanban_migrate_users_moved', TRUE );
+			update_option( 'kanban_migrate_users_moved', true );
 
 			$response['posts_remaining'] = $response['posts_remaining']-1;
-			$response['continue'] = TRUE;
-			$response['message'] = 'Allowed users moved';
+			$response['continue']        = true;
+			$response['message']         = 'Allowed users moved';
 			wp_send_json_success( $response );
 		}
 
@@ -415,8 +383,7 @@ abstract class Kanban_Db
 		// check for terms to move
 		$is_terms_moved = get_option( 'kanban_migrate_terms_moved' );
 
-		if ( ! $is_terms_moved )
-		{
+		if ( ! $is_terms_moved ) {
 			$sql = "SELECT
 					{$wpdb->prefix}term_taxonomy.`taxonomy`
 					, {$wpdb->prefix}term_taxonomy.`term_taxonomy_id`
@@ -433,54 +400,49 @@ abstract class Kanban_Db
 
 
 			// if we need to move terms
-			if ( ! empty( $terms ) )
-			{
+			if ( ! empty( $terms ) ) {
 				// get settings
-				$kanban_task_status_order = get_option( 'kanban_task_status_order' );
-				$kanban_task_status_colors = get_option( 'kanban_task_status_colors' );
+				$kanban_task_status_order   = get_option( 'kanban_task_status_order' );
+				$kanban_task_status_colors  = get_option( 'kanban_task_status_colors' );
 				$kanban_task_estimate_order = get_option( 'kanban_task_estimate_order' );
 
 
 
 				// get statuses for matching
 				$status_table = Kanban_Status::table_name();
-				$sql = "SELECT * FROM $status_table;";
-				$statuses = $wpdb->get_results( $sql );
+				$sql          = "SELECT * FROM $status_table;";
+				$statuses     = $wpdb->get_results( $sql );
 
 				$status_arr = array();
-				foreach ( $statuses as $status )
-				{
-					$status_arr[$status->title] = $status->id;
+				foreach ( $statuses as $status ) {
+					$status_arr[ $status->title ] = $status->id;
 				}
 
 
 
 				// get estimates for matching
 				$estimates_table = Kanban_Estimate::table_name();
-				$sql = "SELECT * FROM $estimates_table;";
-				$estimates = $wpdb->get_results( $sql );
+				$sql             = "SELECT * FROM $estimates_table;";
+				$estimates       = $wpdb->get_results( $sql );
 
 
 				$estimate_arr = array();
-				foreach ( $estimates as $estimate )
-				{
-					$estimate_arr[$estimate->title] = $estimate->id;
+				foreach ( $estimates as $estimate ) {
+					$estimate_arr[ $estimate->title ] = $estimate->id;
 				}
 
 
 
 				// add each term
-				foreach ( $terms as $term )
-				{
-					switch ( $term->taxonomy )
-					{
+				foreach ( $terms as $term ) {
+					switch ( $term->taxonomy ) {
 						case 'kanban_task_status':
-							if ( isset( $status_arr[$term->name] ) ) continue;
+							if ( isset( $status_arr[ $term->name ] ) ) continue;
 
 							$data = array(
 								'title'     => $term->name,
-								'color_hex' => $kanban_task_status_colors[$term->term_id],
-								'position'  => $kanban_task_status_order[$term->term_id],
+								'color_hex' => $kanban_task_status_colors[ $term->term_id ],
+								'position'  => $kanban_task_status_order[ $term->term_id ],
 							);
 
 							$success = Kanban_Status::replace( $data );
@@ -488,12 +450,12 @@ abstract class Kanban_Db
 							break;
 
 						case 'kanban_task_estimate':
-							if ( isset( $estimate_arr[$term->name] ) ) continue;
+							if ( isset( $estimate_arr[ $term->name ] ) ) continue;
 
 							$data = array(
 								'title'    => $term->name,
 								'hours'    => $term->slug,
-								'position' => $kanban_task_estimate_order[$term->term_id],
+								'position' => $kanban_task_estimate_order[ $term->term_id ],
 							);
 
 							$success = Kanban_Estimate::replace( $data );
@@ -504,11 +466,11 @@ abstract class Kanban_Db
 
 			}
 
-			update_option( 'kanban_migrate_terms_moved', TRUE );
+			update_option( 'kanban_migrate_terms_moved', true );
 
 			$response['posts_remaining'] = $response['posts_remaining']-2;
-			$response['continue'] = TRUE;
-			$response['message'] = 'statuses and estimates updated';
+			$response['continue']        = true;
+			$response['message']         = 'statuses and estimates updated';
 			wp_send_json_success( $response );
 
 		} // is_terms_moved
@@ -533,10 +495,8 @@ abstract class Kanban_Db
 
 
 
-		if ( ! empty( $projects ) )
-		{
-			foreach ( $projects as $post )
-			{
+		if ( ! empty( $projects ) ) {
+			foreach ( $projects as $post ) {
 				$data = array(
 					'title'           => $post->title,
 					'created_dt_gmt'  => $post->created_dt_gmt,
@@ -547,9 +507,8 @@ abstract class Kanban_Db
 
 				$success = Kanban_Project::replace( $data );
 
-				if ( $success )
-				{
-					$wpdb->update (
+				if ( $success ) {
+					$wpdb->update(
 						"{$wpdb->prefix}posts",
 						array( 'post_status' => 'trash' ),
 						array( 'ID' => $post->id )
@@ -560,8 +519,8 @@ abstract class Kanban_Db
 
 
 			$response['posts_remaining'] = $response['posts_remaining']-3;
-			$response['continue'] = TRUE;
-			$response['message'] = sprintf( 'project %s moved', $post->id );
+			$response['continue']        = true;
+			$response['message']         = sprintf( 'project %s moved', $post->id );
 			wp_send_json_success( $response );
 		} // projects
 
@@ -605,63 +564,56 @@ abstract class Kanban_Db
 
 
 
-		if ( ! empty( $tasks ) )
-		{
+		if ( ! empty( $tasks ) ) {
 			// get statuses for matching
 			$status_table = Kanban_Status::table_name();
-			$sql = "SELECT * FROM $status_table;";
-			$statuses = $wpdb->get_results( $sql );
+			$sql          = "SELECT * FROM $status_table;";
+			$statuses     = $wpdb->get_results( $sql );
 
 			$status_arr = array();
-			foreach ( $statuses as $status )
-			{
-				$status_arr[$status->title] = $status->id;
+			foreach ( $statuses as $status ) {
+				$status_arr[ $status->title ] = $status->id;
 			}
 
 
 
 			// get estimates for matching
 			$estimates_table = Kanban_Estimate::table_name();
-			$sql = "SELECT * FROM $estimates_table;";
-			$estimates = $wpdb->get_results( $sql );
+			$sql             = "SELECT * FROM $estimates_table;";
+			$estimates       = $wpdb->get_results( $sql );
 
 
 			$estimate_arr = array();
-			foreach ( $estimates as $estimate )
-			{
-				$estimate_arr[$estimate->title] = $estimate->id;
+			foreach ( $estimates as $estimate ) {
+				$estimate_arr[ $estimate->title ] = $estimate->id;
 			}
 
 
 
 			// get projects for matching
 			$projects_table = Kanban_Project::table_name();
-			$sql = "SELECT * FROM $projects_table;";
-			$projects = $wpdb->get_results( $sql );
+			$sql            = "SELECT * FROM $projects_table;";
+			$projects       = $wpdb->get_results( $sql );
 
 			// build look up array by name
 			$projects_arr = array();
 
-			if ( ! empty( $projects ) )
-			{
-				foreach ( $projects as $project )
-				{
-					$projects_arr[$project->title] = $project->id;
+			if ( ! empty( $projects ) ) {
+				foreach ( $projects as $project ) {
+					$projects_arr[ $project->title ] = $project->id;
 				}
 			}
 
 
 
 			$estimate_arr = array();
-			foreach ( $estimates as $estimate )
-			{
-				$estimate_arr[$estimate->title] = $estimate->id;
+			foreach ( $estimates as $estimate ) {
+				$estimate_arr[ $estimate->title ] = $estimate->id;
 			}
 
 
 
-			foreach ( $tasks as $post )
-			{
+			foreach ( $tasks as $post ) {
 				// get terms for this task
 				$sql = "SELECT
 						{$wpdb->prefix}terms.name
@@ -682,41 +634,31 @@ abstract class Kanban_Db
 				);
 
 				$terms_arr = array();
-				foreach ( $terms as $term_data )
-				{
-					$terms_arr[$term_data->taxonomy] = $term_data->name;
+				foreach ( $terms as $term_data ) {
+					$terms_arr[ $term_data->taxonomy ] = $term_data->name;
 				}
 
 
 
-				if ( isset( $terms_arr['kanban_task_status'] ) && isset( $status_arr[$terms_arr['kanban_task_status']] ) )
-				{
-					$status_id = $status_arr[$terms_arr['kanban_task_status']];
-				}
-				else
-				{
+				if ( isset( $terms_arr['kanban_task_status'] ) && isset( $status_arr[ $terms_arr['kanban_task_status'] ] ) ) {
+					$status_id = $status_arr[ $terms_arr['kanban_task_status'] ];
+				} else {
 					$status_id = 0;
 				}
 
 
 
-				if ( isset( $terms_arr['kanban_task_estimate'] ) && isset( $estimate_arr[$terms_arr['kanban_task_estimate']] ) )
-				{
-					$estimate_id = $estimate_arr[$terms_arr['kanban_task_estimate']];
-				}
-				else
-				{
+				if ( isset( $terms_arr['kanban_task_estimate'] ) && isset( $estimate_arr[ $terms_arr['kanban_task_estimate'] ] ) ) {
+					$estimate_id = $estimate_arr[ $terms_arr['kanban_task_estimate'] ];
+				} else {
 					$estimate_id = 0;
 				}
 
 
 
-				if ( isset( $projects_arr[$post->project_name] ) )
-				{
-					$project_id = $projects_arr[$post->project_name];
-				}
-				else
-				{
+				if ( isset( $projects_arr[ $post->project_name ] ) ) {
+					$project_id = $projects_arr[ $post->project_name ];
+				} else {
 					$project_id = 0;
 				}
 
@@ -743,9 +685,8 @@ abstract class Kanban_Db
 
 
 
-				if ( $success )
-				{
-					$wpdb->update (
+				if ( $success ) {
+					$wpdb->update(
 						"{$wpdb->prefix}posts",
 						array( 'post_status' => 'trash' ),
 						array( 'ID' => $post->id )
@@ -770,10 +711,8 @@ abstract class Kanban_Db
 
 
 
-				if ( count( $comments ) > 0 )
-				{
-					foreach ( $comments as $comment )
-					{
+				if ( count( $comments ) > 0 ) {
+					foreach ( $comments as $comment ) {
 						$data = array(
 							'description'     => $comment->post_content,
 							'created_dt_gmt'  => $comment->post_date_gmt,
@@ -786,9 +725,8 @@ abstract class Kanban_Db
 						$success = Kanban_Comment::insert( $data );
 
 						// mark as trash
-						if ( $success )
-						{
-							$wpdb->update (
+						if ( $success ) {
+							$wpdb->update(
 								"{$wpdb->prefix}posts",
 								array( 'post_status' => 'trash' ),
 								array( 'ID' => $comment->ID )
@@ -796,8 +734,7 @@ abstract class Kanban_Db
 						}
 
 						// add task hour
-						if ( strpos( $comment->post_content, 'hour of work' ) !== FALSE )
-						{
+						if ( strpos( $comment->post_content, 'hour of work' ) !== false ) {
 							$data = array(
 								'task_id'        => $task_id,
 								'created_dt_gmt' => $comment->post_date_gmt,
@@ -822,7 +759,7 @@ abstract class Kanban_Db
 
 
 			$response['posts_remaining'] = Kanban::get_instance()->settings->records_to_move - 4;
-			$response['continue'] = TRUE;
+			$response['continue']        = true;
 			wp_send_json_success( $response );
 
 		} // task
@@ -898,7 +835,7 @@ abstract class Kanban_Db
 
 
 		// cleanup records
-		$wpdb->update (
+		$wpdb->update(
 			"{$wpdb->prefix}posts",
 			array( 'post_status' => 'trash' ),
 			array(
@@ -907,7 +844,7 @@ abstract class Kanban_Db
 			)
 		);
 
-		$wpdb->update (
+		$wpdb->update(
 			"{$wpdb->prefix}posts",
 			array( 'post_status' => 'trash' ),
 			array(
@@ -916,7 +853,7 @@ abstract class Kanban_Db
 			)
 		);
 
-		$wpdb->update (
+		$wpdb->update(
 			"{$wpdb->prefix}posts",
 			array( 'post_status' => 'trash' ),
 			array(
@@ -943,14 +880,13 @@ abstract class Kanban_Db
 
 
 
-		$response['done'] = TRUE;
+		$response['done'] = true;
 		wp_send_json_success( $response );
 	}
 
 
 
-	static function add_defaults()
-	{
+	static function add_defaults() {
 		global $wpdb;
 
 
@@ -965,8 +901,7 @@ abstract class Kanban_Db
 
 
 
-		if ( $boards_count == 0 )
-		{
+		if ( $boards_count == 0 ) {
 			$data = array(
 				'title'           => 'Your first kanban board',
 				'created_dt_gmt'  => Kanban_Utils::mysql_now_gmt(),
@@ -1000,8 +935,7 @@ abstract class Kanban_Db
 
 
 
-		if ( $status_count == 0 )
-		{
+		if ( $status_count == 0 ) {
 			$statuses = array(
 				'Backlog'     => '#8224e3',
 				'Ready'       => '#eeee22',
@@ -1012,8 +946,7 @@ abstract class Kanban_Db
 			);
 
 			$i = 0;
-			foreach ( $statuses as $status => $color )
-			{
+			foreach ( $statuses as $status => $color ) {
 				$data = array(
 					'title'     => $status,
 					'color_hex' => $color,
@@ -1040,8 +973,7 @@ abstract class Kanban_Db
 
 
 
-		if ( $estimate_count == 0 )
-		{
+		if ( $estimate_count == 0 ) {
 			$estimates = array(
 					'2'  => '2h',
 					'4'  => '4h',
@@ -1051,13 +983,12 @@ abstract class Kanban_Db
 				);
 
 			$i = 0;
-			foreach ( $estimates as $hours => $title )
-			{
+			foreach ( $estimates as $hours => $title ) {
 				$data = array(
 					'title'    => $title,
 					'hours'    => $hours,
 					'position' => $i,
-					'board_id'  => $board_id,
+					'board_id' => $board_id,
 				);
 
 				Kanban_Estimate::replace( $data );
@@ -1078,8 +1009,7 @@ abstract class Kanban_Db
 
 
 
-		if ( $tasks_count == 0 )
-		{
+		if ( $tasks_count == 0 ) {
 			$data = array(
 				'title'           => 'Your first task',
 				'board_id'        => $board_id,
@@ -1103,18 +1033,16 @@ abstract class Kanban_Db
 		$options = $wpdb->get_results( $sql );
 
 		$options_arr = array();
-		foreach ( $options as $option )
-		{
-			$options_arr[$option->name] = $option->value;
+		foreach ( $options as $option ) {
+			$options_arr[ $option->name ] = $option->value;
 		}
 
 
 
 		$defaults = Kanban_Option::get_defaults();
 
-		foreach ( $defaults as $name => $value )
-		{
-			if ( isset( $options_arr[$name] ) ) continue;
+		foreach ( $defaults as $name => $value ) {
+			if ( isset( $options_arr[ $name ] ) ) continue;
 
 			$data = array(
 				'name'  => $name,
@@ -1132,11 +1060,9 @@ abstract class Kanban_Db
 	 * get the stored db version
 	 * @return float the current stored version
 	 */
-	static function installed_ver()
-	{
+	static function installed_ver() {
 		// if it hasn't been loaded yet
-		if ( ! isset( self::$installed_ver ) )
-		{
+		if ( ! isset( self::$installed_ver ) ) {
 			// get it from the db, and store it
 			self::$installed_ver = get_option( 'kanban_db_version' );
 		}
@@ -1152,8 +1078,7 @@ abstract class Kanban_Db
 	 * @param  string $table the classname for the table
 	 * @return string        the complete table name
 	 */
-	static function format_table_name( $table )
-	{
+	static function format_table_name( $table ) {
 		global $wpdb;
 
 		return sprintf(
@@ -1170,10 +1095,8 @@ abstract class Kanban_Db
 	 * get the instance of this class
 	 * @return object the instance
 	 */
-	public static function get_instance()
-	{
-		if ( ! self::$instance )
-		{
+	public static function get_instance() {
+		if ( ! self::$instance ) {
 			self::$instance = new self();
 		}
 		return self::$instance;
