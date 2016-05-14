@@ -26,14 +26,13 @@ class Kanban_Taskmeta extends Kanban_Db
 	// );
 
 
-	static function update( $task_id, $meta_key, $meta_value )
-	{
+	static function update( $task_id, $meta_key, $meta_value ) {
 		global $wpdb;
 
 
 
 		// delete existing record
-		self::delete($task_id, $meta_key);
+		self::delete( $task_id, $meta_key );
 
 
 
@@ -61,8 +60,7 @@ class Kanban_Taskmeta extends Kanban_Db
 
 
 
-	static function delete( $task_id, $meta_key )
-	{
+	static function delete( $task_id, $meta_key ) {
 		global $wpdb;
 
 
@@ -84,8 +82,7 @@ class Kanban_Taskmeta extends Kanban_Db
 
 
 	// define the db schema
-	static function db_table()
-	{
+	static function db_table() {
 		return 'CREATE TABLE ' . self::table_name() . " (
 			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 			task_id bigint(20) unsigned NOT NULL DEFAULT '0',
