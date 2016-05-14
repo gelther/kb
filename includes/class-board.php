@@ -35,7 +35,7 @@ class Kanban_Board extends Kanban_Db
 		'modified_dt_gmt' => 'datetime',
 		'user_id_author'  => 'int',
 		'is_active'       => 'bool',
-		'position' => 'int'
+		'position'        => 'int'
 	);
 
 	static $boards = array();
@@ -43,8 +43,7 @@ class Kanban_Board extends Kanban_Db
 
 
 	// add actions and filters
-	static function init()
-	{
+	static function init() {
 		// send board data to the board template
 		add_filter( 'template_include', array( __CLASS__, 'send_page_data_to_template' ), 100 ); // must be higher than template
 
@@ -58,16 +57,14 @@ class Kanban_Board extends Kanban_Db
 	 * @param  string $template the passed in template path
 	 * @return string           the same template path
 	 */
-	static function send_page_data_to_template( $template )
-	{
+	static function send_page_data_to_template( $template ) {
 		// make sure we're looking at the board
 		if ( ! isset( Kanban_Template::get_instance()->slug ) || Kanban_Template::get_instance()->slug != self::$slug ) return $template;
 
 
 
 		// make sure they don't need to upgrade
-		if ( Kanban::get_instance()->settings->records_to_move > 0 )
-		{
+		if ( Kanban::get_instance()->settings->records_to_move > 0 ) {
 			?>
 			<p>
 			<?php echo sprintf( __( 'We\'ve found %s kanban records that need to be migrated for the latest version of Kanban for WordPress! ', 'kanban' ), Kanban::get_instance()->settings->records_to_move ); ?>
@@ -141,8 +138,7 @@ class Kanban_Board extends Kanban_Db
 
 
 
-	static function render_js_templates()
-	{
+	static function render_js_templates() {
 		// Automatically load router files
 		$js_templates = glob( Kanban::$instance->settings->path . '/templates/inc/t-*.php' );
 
@@ -152,7 +148,7 @@ class Kanban_Board extends Kanban_Db
 		);
 
 		foreach ( $js_templates as $js_template ) : ?>
-		<script type="text/html" id="<?php echo basename($js_template, '.php'); ?>">
+		<script type="text/html" id="<?php echo basename( $js_template, '.php' ); ?>">
 
 		<?php include $js_template; ?>
 
@@ -162,10 +158,8 @@ class Kanban_Board extends Kanban_Db
 
 
 
-	static function get_all( $sql = NULL )
-	{
-		if ( empty(self::$boards) )
-		{
+	static function get_all( $sql = NULL ) {
+		if ( empty( self::$boards ) ) {
 			$table_name = self::table_name();
 
 			$sql = "SELECT *
@@ -177,7 +171,7 @@ class Kanban_Board extends Kanban_Db
 
 			$records = parent::get_all( $sql );
 
-			self::$boards = Kanban_Utils::build_array_with_id_keys($records);
+			self::$boards = Kanban_Utils::build_array_with_id_keys( $records );
 		}
 
 		return apply_filters(
@@ -188,55 +182,48 @@ class Kanban_Board extends Kanban_Db
 
 
 
-	static function get_current ($board_id = NULL)
-	{
+	static function get_current( $board_id = NULL ) {
 		// if one isn't passed, but is set elsewhere
-		if ( is_null($board_id) && isset($_REQUEST['board_id']) )
-		{
+		if ( is_null( $board_id ) && isset( $_REQUEST['board_id'] ) ) {
 			$board_id = $_REQUEST['board_id'];
 		}
 
 		$boards = self::get_all();
 
 		// if the one we want exists
-		if ( !is_null($board_id) && isset($boards[$board_id]) )
-		{
-			return $boards[$board_id];
+		if ( ! is_null( $board_id ) && isset( $boards[ $board_id ] ) ) {
+			return $boards[ $board_id ];
 		}
 
 		// otherwise, pass the first one
-		return reset($boards);
+		return reset( $boards );
 	}
 
 
 
 	// extend parent, so it's accessible from other classes
-	static function replace( $data )
-	{
+	static function replace( $data ) {
 		return self::_replace( $data );
 	}
 
 
 
 	// extend parent, so it's accessible from other classes
-	static function delete( $where )
-	{
+	static function delete( $where ) {
 		return self::_delete( $where );
 	}
 
 
 
 	// extend parent, so it's accessible from other classes
-	static function insert_id()
-	{
+	static function insert_id() {
 		return self::_insert_id();
 	}
 
 
 
 	// define the db schema
-	static function db_table()
-	{
+	static function db_table() {
 		return 'CREATE TABLE ' . self::table_name() . ' (
 					id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 					title text NOT NULL,
@@ -257,10 +244,8 @@ class Kanban_Board extends Kanban_Db
 	 * get the instance of this class
 	 * @return object the instance
 	 */
-	public static function get_instance()
-	{
-		if ( ! self::$instance )
-		{
+	public static function get_instance() {
+		if ( ! self::$instance ) {
 			self::$instance = new self();
 		}
 		return self::$instance;
@@ -272,7 +257,5 @@ class Kanban_Board extends Kanban_Db
 	 * construct that can't be overwritten
 	 */
 	private function __construct() {}
-
-
 
 } // Kanban_Board
