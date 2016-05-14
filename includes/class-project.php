@@ -34,23 +34,20 @@ class Kanban_Project extends Kanban_Db
 
 
 
-	static function init()
-	{
+	static function init() {
 		add_action( sprintf( 'wp_ajax_save_%s', self::$slug ), array( __CLASS__, 'ajax_save' ) );
 		add_action( sprintf( 'wp_ajax_delete_%s', self::$slug ), array( __CLASS__, 'ajax_delete' ) );
 	}
 
 
 
-	static function ajax_save()
-	{
-		if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-save' ) || ! is_user_logged_in() ) wp_send_json_error();
+	static function ajax_save() {
+		if ( ! isset( $_POST[ Kanban_Utils::get_nonce() ] ) || ! wp_verify_nonce( $_POST[ Kanban_Utils::get_nonce() ], 'kanban-save' ) || ! is_user_logged_in() ) wp_send_json_error();
 
 
 
-		if ( ! isset( $_POST['project']['id'] ) )
-		{
-			$_POST['project']['id'] = '';
+		if ( ! isset( $_POST['project']['id'] ) ) {
+			$_POST['project']['id']             = '';
 			$_POST['project']['created_dt_gmt'] = Kanban_Utils::mysql_now_gmt();
 		}
 
@@ -61,7 +58,7 @@ class Kanban_Project extends Kanban_Db
 
 
 		$_POST['project']['modified_dt_gmt'] = Kanban_Utils::mysql_now_gmt();
-		$_POST['project']['user_id_author'] = get_current_user_id();
+		$_POST['project']['user_id_author']  = get_current_user_id();
 
 
 
@@ -83,15 +80,12 @@ class Kanban_Project extends Kanban_Db
 
 
 
-		if ( $is_successful )
-		{
+		if ( $is_successful ) {
 			wp_send_json_success( array(
-				'message' => sprintf( '%s saved', self::$slug ),
+				'message'   => sprintf( '%s saved', self::$slug ),
 				self::$slug => $post_data
 			) );
-		}
-		else
-		{
+		} else {
 			wp_send_json_error( array(
 				'message' => sprintf( 'Error saving %s', self::$slug )
 			) );
@@ -100,9 +94,8 @@ class Kanban_Project extends Kanban_Db
 
 
 
-	static function ajax_delete()
-	{
-		if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-save' ) || ! is_user_logged_in() ) wp_send_json_error();
+	static function ajax_delete() {
+		if ( ! isset( $_POST[ Kanban_Utils::get_nonce() ] ) || ! wp_verify_nonce( $_POST[ Kanban_Utils::get_nonce() ], 'kanban-save' ) || ! is_user_logged_in() ) wp_send_json_error();
 
 
 
@@ -118,14 +111,11 @@ class Kanban_Project extends Kanban_Db
 
 
 
-		if ( $is_successful )
-		{
+		if ( $is_successful ) {
 			wp_send_json_success( array(
 				'message' => sprintf( '%s deleted', self::$slug )
 			) );
-		}
-		else
-		{
+		} else {
 			wp_send_json_error( array(
 				'message' => sprintf( 'Error deleting %s', self::$slug )
 			) );
@@ -135,15 +125,13 @@ class Kanban_Project extends Kanban_Db
 
 
 	// extend parent, so it's accessible from other classes
-	static function replace( $data )
-	{
+	static function replace( $data ) {
 		return self::_replace( $data );
 	}
 
 
 
-	protected static function delete( $id )
-	{
+	protected static function delete( $id ) {
 		return self::_update(
 			array( 'is_active' => 0 ),
 			array( 'id' => $id )
@@ -152,9 +140,8 @@ class Kanban_Project extends Kanban_Db
 
 
 
-	static function get_all( $sql = NULL )
-	{
-		$table_name = self::table_name();
+	static function get_all( $sql = NULL ) {
+		$table_name       = self::table_name();
 		$tasks_table_name = Kanban_Task::table_name();
 
 		$sql = "SELECT `projects`.*,
@@ -173,22 +160,20 @@ class Kanban_Project extends Kanban_Db
 
 		$records = parent::get_all( $sql );
 
-		foreach ( $records as $key => $record )
-		{
-			$records[$key]->title = Kanban_Utils::str_for_frontend( $records[$key]->title );
+		foreach ( $records as $key => $record ) {
+			$records[ $key ]->title = Kanban_Utils::str_for_frontend( $records[ $key ]->title );
 		}
 
 		return apply_filters(
 			'kanban_project_get_all_return',
-			Kanban_Utils::build_array_with_id_keys ( $records, 'id' )
+			Kanban_Utils::build_array_with_id_keys( $records, 'id' )
 		);
 	}
 
 
 
 	// define the db schema
-	static function db_table()
-	{
+	static function db_table() {
 		return 'CREATE TABLE ' . self::table_name() . ' (
 					id bigint(20) NOT NULL AUTO_INCREMENT,
 					title varchar(256) NOT NULL,
@@ -210,10 +195,8 @@ class Kanban_Project extends Kanban_Db
 	 * get the instance of this class
 	 * @return object the instance
 	 */
-	public static function get_instance()
-	{
-		if ( ! self::$instance )
-		{
+	public static function get_instance() {
+		if ( ! self::$instance ) {
 			self::$instance = new self();
 		}
 		return self::$instance;
