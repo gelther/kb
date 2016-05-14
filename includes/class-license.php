@@ -14,16 +14,14 @@ Kanban_License::init();
 class Kanban_License
 {
 
-	static function init()
-	{
+	static function init() {
 		add_action( 'init', array( __CLASS__, 'save_licenses' ), 10 );
 	}
 
 
 
-	static function save_licenses()
-	{
-		if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-licenses' ) || ! is_user_logged_in() ) return;
+	static function save_licenses() {
+		if ( ! isset( $_POST[ Kanban_Utils::get_nonce() ] ) || ! wp_verify_nonce( $_POST[ Kanban_Utils::get_nonce() ], 'kanban-licenses' ) || ! is_user_logged_in() ) return;
 
 
 
@@ -37,11 +35,10 @@ class Kanban_License
 
 
 		// save all single settings
-		foreach ( $_POST['settings'] as $key => $value )
-		{
-			if ( !isset($settings[$key]) ) continue;
+		foreach ( $_POST['settings'] as $key => $value ) {
+			if ( ! isset( $settings[ $key ] ) ) continue;
 
-			Kanban_Option::update($key, $value);
+			Kanban_Option::update( $key, $value );
 		}
 
 
@@ -64,6 +61,3 @@ class Kanban_License
 
 
 }
-
-
-
