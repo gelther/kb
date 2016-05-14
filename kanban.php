@@ -48,48 +48,44 @@ class Kanban
 
 
 
-	static function init()
-	{
+	static function init() {
 		// get instance
 		self::$instance = self::get_instance();
 
 
 
 		// build settings
-		Kanban::get_instance()->settings = (object) array();
+		Kanban::get_instance()->settings       = (object) array();
 		Kanban::get_instance()->settings->path = dirname( __FILE__ );
 		Kanban::get_instance()->settings->file = basename( __FILE__, '.php' );
 
-		if ( ! function_exists( 'get_plugin_data' ) )
-		{
+		if ( ! function_exists( 'get_plugin_data' ) ) {
 			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 		}
-		Kanban::get_instance()->settings->plugin_data = get_plugin_data( __FILE__ );
-		Kanban::get_instance()->settings->basename = strtolower( __CLASS__ );
+		Kanban::get_instance()->settings->plugin_data     = get_plugin_data( __FILE__ );
+		Kanban::get_instance()->settings->basename        = strtolower( __CLASS__ );
 		Kanban::get_instance()->settings->plugin_basename = plugin_basename( __FILE__ );
-		Kanban::get_instance()->settings->uri = plugin_dir_url( __FILE__ );
-		Kanban::get_instance()->settings->pretty_name = __( 'Kanban', Kanban::get_instance()->settings->file );
-		Kanban::get_instance()->settings->admin_notice = '';
+		Kanban::get_instance()->settings->uri             = plugin_dir_url( __FILE__ );
+		Kanban::get_instance()->settings->pretty_name     = __( 'Kanban', Kanban::get_instance()->settings->file );
+		Kanban::get_instance()->settings->admin_notice    = '';
 
 
 
 		// require at least PHP 5.3
-		if ( version_compare( PHP_VERSION, '5.3', '<' ) )
-		{
-			Kanban::get_instance()->settings->admin_notice = __('The %s plugin requires at least PHP 5.3. You have %s. Please upgrade and then re-install the plugin.', 'kanban');
+		if ( version_compare( PHP_VERSION, '5.3', '<' ) ) {
+			Kanban::get_instance()->settings->admin_notice = __( 'The %s plugin requires at least PHP 5.3. You have %s. Please upgrade and then re-install the plugin.', 'kanban' );
 			add_action( 'admin_notices', array( __CLASS__, 'notify_php_version' ) );
 			return;
 		}
 
 
 
-		$permalink_structure = get_option('permalink_structure');
-		if ( empty($permalink_structure) )
-		{
+		$permalink_structure = get_option( 'permalink_structure' );
+		if ( empty( $permalink_structure ) ) {
 			Kanban::get_instance()->settings->admin_notice = sprintf(
-				__('The %s plugin does not support "plain" permalinks. Please visit <a href="%s">Settings > Permalinks</a> and choose any option besides "Plain".', 'kanban'),
+				__( 'The %s plugin does not support "plain" permalinks. Please visit <a href="%s">Settings > Permalinks</a> and choose any option besides "Plain".', 'kanban' ),
 				'%s',
-				admin_url('options-permalink.php')
+				admin_url( 'options-permalink.php' )
 				);
 			add_action( 'admin_notices', array( __CLASS__, 'notify_php_version' ) );
 		}
@@ -102,8 +98,7 @@ class Kanban
 
 		// Automatically load classes
 		$files = glob( Kanban::get_instance()->settings->path . '/includes/class-*.php' );
-		foreach ( $files as $file )
-		{
+		foreach ( $files as $file ) {
 			include_once $file;
 		}
 
@@ -124,16 +119,14 @@ class Kanban
 
 
 
-	static function on_activation()
-	{
+	static function on_activation() {
 		// check for db updates and migration
 		Kanban_Db::check_for_updates();
 
 
 
 		// populate defaults
-		if ( Kanban::get_instance()->settings->records_to_move == 0 )
-		{
+		if ( Kanban::get_instance()->settings->records_to_move == 0 ) {
 			add_action( 'init', Kanban_Db::add_defaults() );
 		}
 
@@ -150,9 +143,8 @@ class Kanban
 
 
 
-	static function on_deactivation()
-	{
-		delete_option('kanban_db_version');
+	static function on_deactivation() {
+		delete_option( 'kanban_db_version' );
 	}
 
 
@@ -160,8 +152,7 @@ class Kanban
 	/**
 	 * friendly notice about php version requirement
 	 */
-	static function notify_php_version()
-	{
+	static function notify_php_version() {
 		if ( ! is_admin() ) return;
 		?>
 			<div class="error below-h2">
@@ -184,10 +175,8 @@ class Kanban
 	 * get the instance of this class
 	 * @return object the instance
 	 */
-	public static function get_instance()
-	{
-		if ( ! self::$instance )
-		{
+	public static function get_instance() {
+		if ( ! self::$instance ) {
 			self::$instance = new self();
 		}
 		return self::$instance;
@@ -199,7 +188,5 @@ class Kanban
 	 * construct that can't be overwritten
 	 */
 	private function __construct() { }
-
-
 
 } // Kanban
