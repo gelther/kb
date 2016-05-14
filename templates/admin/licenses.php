@@ -16,7 +16,7 @@
 	<div class="updated">
 		<p><?php echo $_GET['message']; ?></p>
 	</div>
-<?php endif // message ?>
+<?php endif; // message ?>
 
 
 
@@ -42,4 +42,3 @@
 
 
 </div><!-- wrap -->
-
